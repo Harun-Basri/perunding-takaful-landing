@@ -357,3 +357,10 @@ Versi footer: v5.1 → **v6.0**. Saiz: 66.6 KB → 72.4 KB.
 - `apple-touch-icon` (180x180 PNG) untuk "Add to Home Screen" iPhone.
 - Og-image sebenar (1200x630).
 - Notis "Online" 24/7 pada header masih statik.
+
+### 16. Foto profil (DP) dibenamkan — v6.1
+- `dptest.jpg` (640x640) dipotong segi empat fokus kepala/bahu, dikecilkan ke 256x256 JPEG q84 (19 KB), dibenamkan sebagai data URI sekali sahaja dalam pemboleh ubah `--dp`.
+- Dipakai pada `.topbar .mini-avatar` (44px) dan `.avatar-lg#pcAvatar` (96px) melalui `background-image` + `background-size:cover` — jadi halaman kekal **0 permintaan luaran** dan kekal 0 `<img>`.
+- Teks "HH" pada avatar disembunyikan (`color:transparent`); lencana biru `.badge-mini` dan gelang panel tidak disentuh.
+- Morph avatar (header <-> panel) tidak terjejas kerana geometri tidak berubah.
+- Saiz fail: 84289 -> 109452 bait.

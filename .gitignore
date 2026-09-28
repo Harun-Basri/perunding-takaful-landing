@@ -1,5 +1,7 @@
 # Tangkapan skrin kerja (bukti semasa membina) — bukan sebahagian daripada laman.
 _*.png
+_*.jpg
+_*.html
 
 # Artifak binaan: base64 yang dijana semula daripada logo sumber.
 assets/*.b64
