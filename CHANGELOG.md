@@ -364,3 +364,55 @@ Versi footer: v5.1 → **v6.0**. Saiz: 66.6 KB → 72.4 KB.
 - Teks "HH" pada avatar disembunyikan (`color:transparent`); lencana biru `.badge-mini` dan gelang panel tidak disentuh.
 - Morph avatar (header <-> panel) tidak terjejas kerana geometri tidak berubah.
 - Saiz fail: 84289 -> 109452 bait.
+
+### 17. Tab langkah borang gaya garis bawah — v6.2
+- Rujukan reka bentuk daripada pengguna: tab ikon/nombor + label, garis halus sepanjang baris, tab aktif berlatar tint lembut dengan garis tebal 2px di bawahnya.
+- Aksen guna maroon jenama (`--maroon-2`) dan tint `#fbe6e9`, bukan ungu contoh.
+- Cip bulat `.stp-n` dikosongkan (jadi sebahagian teks) supaya struktur ikon+label sama seperti rujukan.
+- Varian mod gelap ditambah (tint `#3a151c`, teks `#ffb3c1`).
+- Saiz fail: 110422 -> 111348 bait.
+- **Pepijat sedia ada dibaiki:** blok `@media (prefers-color-scheme: dark)` tidak diskop, jadi `data-theme="light"` tidak dapat menutup `body`, `input`, `select`, `textarea`, `.social`, `.quote`, `.company` — medan kekal gelap walaupun suis tema ditekan. 10 pemilih kini diskop dgn `:root:not([data-theme="light"])`. Mod gelap sendiri tidak berubah (disahkan: input `rgb(27,18,20)` tanpa atribut, `rgb(251,249,247)` bila dipaksa cerah).
+### 18. Tab langkah: gaya kawalan bersegmen — v6.3
+- Rujukan kedua pengguna: trek berlatar lembut bersudut bulat 12px, segmen aktif = pil putih (kad) bersudut 9px + bayang halus + teks aksen maroon.
+- Menggantikan gaya garis bawah item 17 sepenuhnya; garis 2px dan tint #fbe6e9 dibuang.
+- Aksen maroon jenama (`--maroon-2`); rujukan asal guna biru.
+- Mod gelap: trek #2b2023, pil aktif #3f2d32, teks #ffb3c1 (7.64:1).
+- Sasaran sentuh dinaikkan 33px -> ~45px.
+- Nombor langkah dikembalikan sebagai bulatan tema maroon: 18px, aktif = bulatan maroon pejal + teks putih, tak aktif = tint maroon lembut `#f6dde1` + teks maroon. Gap 7px -> 5px supaya label masih muat; disahkan tiada label terpotong (3 segmen 115px).
+### 19. Tab langkah: gaya garis bawah bersih — v6.4
+- Rujukan ketiga pengguna: tiada trek dan tiada latar tint; tab = bulatan nombor + label.
+- Tab aktif = teks maroon + garis 2px SELEBAR KANDUNGAN tab (bukan selebar lajur). Dicapai dgn `flex:0 1 auto` + `justify-content:space-between` pada `.stepper` (lebar tab 50/89/63px).
+- Menggantikan kawalan bersegmen item 18 sepenuhnya (trek `#f2ede8` dan pil putih dibuang).
+- Bulatan maroon dikekalkan (18px; aktif pejal + teks putih, tak aktif `#f6dde1` + teks maroon).
+- Tinggi tab 40px; disahkan tiada label terpotong.
+- Susun atur diubah atas permintaan pengguna: tiga tab kini SAMA LEBAR (`flex:1 1 0`) dan kandungan dipusatkan; garis aktif jadi selebar lajur (115px) bukan selebar kandungan. `justify-content:space-between` dibuang.
+### 20. Label kad Pilihan Perlindungan dipecah dua baris — v6.5
+- Permintaan pengguna: "Medical" di atas, "Card" di bawah — dan dua pilihan lain.
+- Ketiga-tiga `.plan-name` kini guna `<br>`: Medical Card / Hibah Takaful / Sakit Kritikal.
+- Nilai yang DIHANTAR tidak berubah: ia datang dari `data-plan` + input tersembunyi `#f_perlindungan`, bukan teks yang dipaparkan. Disahkan: `data-plan` kekal "Medical Card" dsb.
+- Diukur: setiap label 2 baris (25px), ketiga-tiga kad 69px tinggi (sama rata), tiada limpahan.
+### 21. Susun semula langkah borang + alih STATUS & SEJARAH PENYAKIT — v6.6
+- Permintaan pengguna: pindahkan STATUS dan SEJARAH PENYAKIT ke langkah KESIHATAN; susunan baharu PELAN(1) -> DIRI(2) -> KESIHATAN(3).
+- Isi sekarang: L1 PELAN = Bajet + Pilihan Perlindungan | L2 DIRI = Nama, Tarikh Lahir, Telefon, Bandar, Negeri | L3 KESIHATAN = Jantina, Merokok, Berat, Tinggi, Pekerjaan, Status, Sejarah Penyakit.
+- Butang navigasi mengikut KEDUDUKAN: L1 Seterusnya (tiada Kembali), L2 Kembali+Seterusnya, L3 Kembali+Hantar+PDPA. `data-step` dikemas kini 1/2/3.
+- Nilai yang dihantar tidak berubah (data-plan + input tersembunyi); jumlah medan `f_*` kekal 14.
+- Diuji aliran sebenar dlm pelayar: klik pilihan wajib L1 -> Seterusnya maju ke L2, 0 ralat, 10% -> 18%.
+- Nota: susunan soalan dlm mesej WhatsApp tidak diubah (bukan sebahagian permintaan ini).
+### 22. PELAN disusun semula + 5 medan dialih ke DIRI — v6.7
+- PELAN: Pilihan Perlindungan kini DAHULU, kemudian Bajet bulanan yang selesa.
+- JANTINA, BERAT, TINGGI, PEKERJAAN, STATUS dialih dari KESIHATAN ke DIRI, disusun mengikut senarai pengguna dan dibubuh selepas medan sedia ada DIRI.
+- KESIHATAN kini tinggal MEROKOK + SEJARAH PENYAKIT sahaja.
+- JANTINA dikeluarkan drpd grid `.row2` yang dikongsinya dgn MEROKOK; MEROKOK dilepas drpd grid itu (kini lebar penuh) kerana `.row2` ialah grid 2 lajur `1fr 1fr` — sebaris seorang akan jadi separuh lebar.
+- Diuji aliran sebenar: pilihan wajib L1 -> Seterusnya -> L2 aktif, progres 10% -> 18%, 0 ralat.
+### 23. Susun atur DIRI dikemas — v6.8
+- BANDAR & NEGERI dialih ke bawah BERAT & TINGGI.
+- STATUS dan PEKERJAAN ditukar tempat (kini STATUS dahulu, kemudian PEKERJAAN).
+- Susunan akhir DIRI: Nama Penuh | Tarikh Lahir + No Telefon | Jantina | Berat + Tinggi | Bandar + Negeri | Status | Pekerjaan.
+- Disahkan melalui kedudukan sebenar label dlm pelayar (bukan hanya susunan DOM): urutan visual sepadan; 0 ralat; progres 10% -> 18% selepas langkah 1.
+### 24. Media Sosial: empat sebaris, nama pengguna dibuang — v6.9
+- `.socials` ditukar dari grid 2x2 (`1fr 1fr`) kepada `repeat(4,1fr)` + gap 8px -> empat tile sama lebar 79px, semuanya sebaris (disahkan: `top` sama utk keempat-empat).
+- Teks nama pengguna (`<div class="handle">`) dibuang sepenuhnya - 4 daripadanya. Tiada JS membacanya (disahkan dgn grep pd blok skrip).
+- `.social .icon` kehilangan jidar bawah 8px (itu ruang utk teks handle), dan peraturan mati `#profilPanel .social .handle` dibuang.
+- `aria-label` diringkaskan kepada nama platform sahaja (Instagram/Facebook/TikTok/Threads).
+- Nota: aplikasi keempat ialah THREADS, bukan WhatsApp. Tile kini ikon sahaja; nama platform hanya wujud dlm aria-label, tidak dipaparkan.
+
