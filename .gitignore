@@ -1,0 +1,15 @@
+# Tangkapan skrin kerja (bukti semasa membina) — bukan sebahagian daripada laman.
+_*.png
+
+# Artifak binaan: base64 yang dijana semula daripada logo sumber.
+assets/*.b64
+
+# Salinan baseline asal. Buang baris ini kalau anda mahu ia dikongsi dalam repo.
+original/
+
+# Fail sistem / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
