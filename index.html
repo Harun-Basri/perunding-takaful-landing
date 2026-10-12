@@ -670,15 +670,39 @@
   }
 
   /* Bawa skrin ke bar langkah borang. Hormati prefers-reduced-motion. */
+  /* Pastikan bar langkah boleh sampai ke ATAS skrin.
+     Kalau dokumen lebih pendek drpd (atas bar + tinggi skrin), pelayar memotong skrol
+     dan bar tersangkut di tengah (kes langkah 3 yg ringkas). Tambah ruang pada panel aktif. */
+  function ruangBar(){
+    var nav=document.querySelector('.langkah'), panel=document.querySelector('.langkah-panel.aktif');
+    if(!nav||!panel) return;
+    panel.style.minHeight='';
+    var skrol=window.pageYOffset||document.documentElement.scrollTop||0;
+    var atasNav=nav.getBoundingClientRect().top+skrol;
+    /* +28px bantalan: supaya bar benar-benar duduk di atas, bukan terlekat 1-2px di bawah */
+    var perlu=atasNav+(window.innerHeight||document.documentElement.clientHeight)+28;
+    var ada=Math.max(document.documentElement.scrollHeight, document.body?document.body.scrollHeight:0);
+    if(ada<perlu){
+      var tinggi=panel.getBoundingClientRect().height;
+      panel.style.minHeight=Math.ceil(tinggi+(perlu-ada))+'px';
+    }
+  }
+
   function bawaKeBorang(){
     var bhgn=document.querySelector('.langkah');
     if(!bhgn) return;
+    ruangBar();                    /* tambah ruang DAHULU, baru skrol */
     var halus=(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
     setTimeout(function(){
       try{ bhgn.scrollIntoView({behavior:halus, block:'start'}); }
       catch(e3){ bhgn.scrollIntoView(); }
     }, 80);
   }
+
+  ruangBar();
+  window.addEventListener('resize', ruangBar);
+  window.addEventListener('load', ruangBar);
+  setTimeout(ruangBar, 400);
 
   function pergi(n){
     n=Math.max(1,Math.min(4,n));
@@ -696,6 +720,7 @@
     tab.forEach(function(b){ b.setAttribute('aria-selected', String(+b.dataset.pergi===n)); });
     garis.style.transform='translateX('+((n-1)*100)+'%)';
     if(n===4) binaSemak();
+    ruangBar();
     kemasKiniPct(n===1?10:(n===2?40:(n===3?70:100)));
   }
 
