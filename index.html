@@ -464,7 +464,7 @@
     </div>
     <h1 class="masuk" style="--d:.12s"><span class="tl">Takaful yang</span><br><span class="tl">betul untuk</span><br><span class="tl"><em>keluarga anda.</em></span></h1>
     <p class="masuk" style="--d:.2s">Isi butiran ringkas, dan saya sendiri akan kira sebut harga percuma untuk anda melalui WhatsApp.</p>
-    <button class="cta masuk" style="--d:.28s" data-pergi="1">Mula Semak Sekarang <span>&#8594;</span></button>
+    <button class="cta masuk" style="--d:.28s" data-pergi="1" data-skrol="1">Mula Semak Sekarang <span>&#8594;</span></button>
     <div class="badges masuk" style="--d:.36s">
       <span class="lbl">Percuma</span><span class="lbl">2 Minit</span>
     </div>
@@ -703,7 +703,18 @@
     if(p){
       var n=+p.dataset.pergi;
       if(n===4 && sekarang!==4){ var r=semuaSah(); if(!r.ok){ tunjukPopup(r); return; } }
-      pergi(n); return;
+      pergi(n);
+      /* butang hero "Mula Semak Sekarang": bawa skrin turun ke borang.
+         Hormati prefers-reduced-motion - pengguna yg mahu kurang gerakan terus lompat. */
+      if(p.dataset.skrol){
+        var bhgn=document.querySelector('.langkah');
+        if(bhgn){
+          var halus=(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
+          setTimeout(function(){ try{ bhgn.scrollIntoView({behavior:halus, block:'start'}); }
+                                 catch(e3){ bhgn.scrollIntoView(); } }, 60);
+        }
+      }
+      return;
     }
 
     var b=ev.target.closest('[data-kembali]');
