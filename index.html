@@ -113,6 +113,17 @@
   .jejak i{position:absolute;inset:0 auto 0 0;width:10%;background:var(--maroon-terang);transition:width .5s var(--lengkung)}
   .langkah{position:relative;display:grid;grid-template-columns:repeat(4,1fr);background:var(--paper);
            border-bottom:1px solid var(--line)}
+  /* blob maroon bergerak di latar bahagian borang.
+     Nota: bekas ini WAJIB bentuk stacking context sendiri. Tanpa itu, pseudo dgn z-index:-1
+     masuk konteks nenek moyang dan tercat DI BAWAH latar .langkah -> blob hilang sepenuhnya. */
+  .langkah{isolation:isolate}
+  .langkah:before,.langkah:after{content:"";position:absolute;z-index:-1;pointer-events:none;
+        border-radius:54% 46% 42% 58% / 46% 56% 44% 54%;
+        background:radial-gradient(circle at 50% 50%,rgba(196,30,58,.34),rgba(196,30,58,.20) 58%,rgba(196,30,58,.06) 100%)}
+  .langkah:before{left:-70px;top:30%;width:540px;height:470px;filter:blur(38px);
+        animation:blobRayau 17s ease-in-out infinite alternate}
+  .langkah:after{right:-84px;bottom:10%;width:500px;height:430px;filter:blur(34px);
+        animation:blobRayau2 23s ease-in-out infinite alternate}
   .langkah button{background:transparent;border:0;padding:14px 4px 12px;cursor:pointer;color:var(--ink-muted);
        font-size:11.5px;font-weight:700;transition:color var(--laju) var(--lengkung)}
   .langkah button[aria-selected="true"]{color:var(--ink)}
