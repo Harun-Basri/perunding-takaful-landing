@@ -1224,7 +1224,7 @@ function pilihFaq(i, segerak){
     if(senarai[i] && dibuka()) senarai[i].scrollIntoView({block:'nearest', behavior:'smooth'});
   }
   ftb.forEach(function(b,i){ b.addEventListener('click',function(e){ e.stopPropagation(); pilihFaq(i); }); });
-  senarai.forEach(function(d,i){ var s=d.querySelector('summary'); if(s) s.addEventListener('click',function(e){ e.preventDefault(); pilihFaq(i); }); });
+  senarai.forEach(function(d,i){ var s=d.querySelector('summary'); if(s) s.addEventListener('click',function(e){ e.preventDefault(); /* klik pd soalan yg sudah terbuka = tutup (togol, spt <details> asli) */ pilihFaq(d.classList.contains('buka')?-1:i); }); });
   pilihFaq(0, true);   /* FAQ pertama kekal terbuka tanpa pager */
 
 })();
