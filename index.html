@@ -464,7 +464,7 @@
     </div>
     <h1 class="masuk" style="--d:.12s"><span class="tl">Takaful yang</span><br><span class="tl">betul untuk</span><br><span class="tl"><em>keluarga anda.</em></span></h1>
     <p class="masuk" style="--d:.2s">Isi butiran ringkas, dan saya sendiri akan kira sebut harga percuma untuk anda melalui WhatsApp.</p>
-    <button class="cta masuk" style="--d:.28s" data-pergi="1" data-skrol="1">Mula Semak Sekarang <span>&#8594;</span></button>
+    <button class="cta masuk" style="--d:.28s" data-pergi="1">Mula Semak Sekarang <span>&#8594;</span></button>
     <div class="badges masuk" style="--d:.36s">
       <span class="lbl">Percuma</span><span class="lbl">2 Minit</span>
     </div>
@@ -671,13 +671,29 @@
     },16);
   }
 
+  /* Bawa skrin ke bar langkah borang. Hormati prefers-reduced-motion. */
+  function bawaKeBorang(){
+    var bhgn=document.querySelector('.langkah');
+    if(!bhgn) return;
+    var halus=(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
+    setTimeout(function(){
+      try{ bhgn.scrollIntoView({behavior:halus, block:'start'}); }
+      catch(e3){ bhgn.scrollIntoView(); }
+    }, 80);
+  }
+
   function pergi(n){
     n=Math.max(1,Math.min(4,n));
     sekarang=n;
+    /* PENTING: hidupkan panel baharu DAHULU, baru matikan yg lama.
+       Susunan asal (matikan dahulu + void offsetWidth utk ulang animasi) menyebabkan
+       sekejap TIADA panel aktif -> dokumen runtuh lebih pendek drpd skrin -> pelayar
+       menolak kedudukan skrol ke 0. Itulah punca skrin melompat ke atas. */
+    var baharu=document.getElementById(panel[n]);
+    void baharu.offsetWidth;          /* reflow di sini: panel lama masih aktif, dokumen penuh */
+    baharu.classList.add('aktif');
     for(var k=1;k<=4;k++){
-      var el=document.getElementById(panel[k]);
-      el.classList.remove('aktif');
-      if(k===n){ void el.offsetWidth; el.classList.add('aktif'); }
+      if(k!==n) document.getElementById(panel[k]).classList.remove('aktif');
     }
     tab.forEach(function(b){ b.setAttribute('aria-selected', String(+b.dataset.pergi===n)); });
     garis.style.transform='translateX('+((n-1)*100)+'%)';
@@ -704,33 +720,25 @@
       var n=+p.dataset.pergi;
       if(n===4 && sekarang!==4){ var r=semuaSah(); if(!r.ok){ tunjukPopup(r); return; } }
       pergi(n);
-      /* butang hero "Mula Semak Sekarang": bawa skrin turun ke borang.
-         Hormati prefers-reduced-motion - pengguna yg mahu kurang gerakan terus lompat. */
-      if(p.dataset.skrol){
-        var bhgn=document.querySelector('.langkah');
-        if(bhgn){
-          var halus=(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
-          setTimeout(function(){ try{ bhgn.scrollIntoView({behavior:halus, block:'start'}); }
-                                 catch(e3){ bhgn.scrollIntoView(); } }, 60);
-        }
-      }
+      bawaKeBorang();          /* kekal di borang, jangan lompat ke atas */
       return;
     }
 
     var b=ev.target.closest('[data-kembali]');
-    if(b){ pergi(sekarang-1); return; }
+    if(b){ pergi(sekarang-1); bawaKeBorang(); return; }
 
     var s=ev.target.closest('[data-seterusnya]');
     if(s){
       if(!sahkan(sekarang)) return;
       if(sekarang===3){ var r2=semuaSah(); if(!r2.ok){ tunjukPopup(r2); return; } }
-      pergi(sekarang+1); return;
+      pergi(sekarang+1); bawaKeBorang(); return;
     }
 
     if(ev.target.closest('[data-hantar]')){
       var r3=semuaSah();
       if(!r3.ok){ tunjukPopup(r3); return; }
       pergi(4);
+      bawaKeBorang();
       return;
     }
 
