@@ -472,7 +472,17 @@ Versi footer: v5.1 → **v6.0**. Saiz: 66.6 KB → 72.4 KB.
   sensitif, yang memerlukan persetujuan nyata di bawah PDPA 2010.
   **Pembetulan dakwaan awal:** sampel v8 MEMANG ada baris persetujuan (dalam langkah 3, sebelum
   butang Semak Butiran) - bukan tiada. Ia cuma lebih lemah daripada v1, dan telah dikuatkan.
-- GitHub Pages dihidupkan (branch `main`, root): https://harun-basri.github.io/perunding-takaful-landing/
+- **GitHub Pages DITOLAK** (HTTP 422: "Your current plan does not support GitHub Pages for this
+  repository"). Sebabnya: repo `Harun-Basri/perunding-takaful-landing` adalah **PRIVATE**
+  (`visibility: PRIVATE`, dicipta 2026-09-28). Pages untuk repo private perlukan pelan berbayar.
+  **Pembetulan:** ringkasan sesi sebelum ini menyatakan repo ini "public" - itu SALAH. Repo adalah
+  private sepanjang masa.
+  Kesan: `og-image.png` sudah dikomit, tetapi pratonton OG kekal kosong sehingga halaman benar-benar
+  dihoskan. Tiga pilihan: (a) tukar repo kepada public -> Pages percuma, tetapi CHANGELOG, .gs dan
+  GOOGLE-SHEET-SETUP.md (mengandungi token) menjadi awam - token itu SUDAH kelihatan dlm halaman
+  yang dihoskan, jadi tiada pendedahan BAHARU; (b) Netlify Drop (repo kekal private); (c) hos
+  berbayar. Domain dlm meta OG menunjuk ke URL GitHub Pages buat masa ini dan PERLU dikemas kini
+  sebaik sahaja hos sebenar dipilih.
 - `v2/` dimasukkan ke git; sebelum ini tidak dijejaki langsung (129 KB kerja tanpa kawalan versi).
 - `index.html`, `CHANGELOG.md`, `sheet-backend.gs`, `GOOGLE-SHEET-SETUP.md` di-commit.
 - Ujian endpoint Sheet (curl): POST memulangkan 302 + `Access-Control-Allow-Origin: *` = corak
