@@ -3,7 +3,7 @@
 Folder ini adalah versi mod. `original/` menyimpan fail asal (jangan edit).
 
 ## Fail
-- `index.html` — versi mod (59 KB, asal 183 KB)
+- `index.html` — versi mod (110 KB, asal 183 KB)
 - `original/Perunding Takaful Landing Page.html` — salinan asal, tidak disentuh
 - `assets/logo.png` — logo GE Takaful dioptimumkan (560x212, 17.6 KB; asal 2357x1184 @ 116 KB)
 - `assets/logo-original.png` — logo asal (rujukan)
@@ -415,4 +415,68 @@ Versi footer: v5.1 → **v6.0**. Saiz: 66.6 KB → 72.4 KB.
 - `.social .icon` kehilangan jidar bawah 8px (itu ruang utk teks handle), dan peraturan mati `#profilPanel .social .handle` dibuang.
 - `aria-label` diringkaskan kepada nama platform sahaja (Instagram/Facebook/TikTok/Threads).
 - Nota: aplikasi keempat ialah THREADS, bukan WhatsApp. Tile kini ikon sahaja; nama platform hanya wujud dlm aria-label, tidak dipaparkan.
+### 25. Hantar data borang ke Google Sheet (pilihan, mati secara lalai) — v7.0
+- `sheet-backend.gs`: Apps Script Web App yg menerima POST dan menambah baris ke Sheet — kepala lajur automatik, semakan TOKEN, `doGet` utk ujian kesihatan.
+- `GOOGLE-SHEET-SETUP.md`: langkah pemasangan lebih kurang 3 minit + amaran (URL awam, PDPA, kegagalan senyap, cara mematikan).
+- index.html: blok `HANTAR KE GOOGLE SHEET` + panggilan `hantarKeSheet()` selepas validasi lulus, sebaris sebelum pautan WhatsApp disediakan.
+- `SHEET_URL` kosong = tiada apa-apa berlaku. Diuji: hantar borang penuh -> href WhatsApp utuh (`web.whatsapp.com/send/?phone=60138884...`), emoji masih dikodkan, 0 ralat medan, 0 ralat JS, 0 permintaan luar.
+- Nota: halaman tidak lagi 100% tanpa permintaan luar, tetapi hanya SEMASA hantar; pemuatan halaman kekal bersih.
+### 26. Google Sheet dihidupkan — v7.1
+- `SHEET_URL` diisi dgn URL Web App sebenar; `SHEET_TOKEN` diisi dgn token yg dipilih.
+- Diuji hujung ke hujung dari halaman: klik Hantar memicu POST tepat sekali ke URL itu
+  (mode `no-cors`, `Content-Type: text/plain;charset=utf-8`), 0 ralat medan, 0 ralat JS.
+- Nota diagnostik: URL pertama yg diberikan (dgn `Fd8r_XT3`) memulangkan HTTP 404 "Page not
+  found"; URL tanpa `_` itu berfungsi (200 + `{"ok":true,"mesej":"Backend borang Takaful hidup."}`).
+- Dua baris ujian wujud dalam Sheet dan perlu dipadam oleh pemilik: "UJIAN - ABAIKAN" (uji curl)
+  dan "Ujian Pelayar Bin Test" (uji pelayar).
 
+### 27. Panel profil putih + blob bergerak + jenama GETB — v8.0 (sampel)
+- Nombor versi: baris halaman `index.html` berada di v7.1, jadi reka bentuk ini dilabel **v8.0**
+  (bukan v2.0 - footer yg bergerak dari v7.1 ke v2.0 nampak seperti kemunduran). Folder `v2/` kekal
+  sebagai nama lineage reka bentuk, bukan nombor keluaran. Sampel dilabel "v8.0 (sampel)" sehingga
+  ciri-cirinya dipindahkan ke `index.html`.
+- `<title>` sampel: "Sampel v2 ..." -> "v8.0 (sampel) - Perunding Takaful . Harun Hakimi".
+- Footer berversi ditambah ke sampel - sampel sebelum ini TIADA footer langsung (tiada `.footer`,
+  tiada "Perunding Takaful Berdaftar", tiada baris PDPA).
+- Panel profil: blok atas ditukar dari maroon gelap `#150409` kepada `--white`. Enam perkara
+  dibetulkan supaya tidak hilang: eyebrow rose `#e9b7c1` (1.75:1, halimunan atas putih) ->
+  `--maroon-gelap` (9.15:1); nama -> `--ink` (18.23:1); butang tutup -> bulatan kelabu muda +
+  chevron gelap; cincin avatar putih lutsinar -> maroon `rgba(196,30,58,.30)`; garis bawah
+  `--line-dark` -> `--line`; orb maroon alpha .45 -> .14.
+- Teks: "PERUNDING TAKAFUL" -> "EJEN TAKAFUL GETB ANDA" (mono CAPS maroon) + baris baharu
+  "EJEN ID 1460000" (mono pudar, 5.09:1). Panel 895px -> 915px.
+- Morph chip kini berterusan (bar putih -> panel putih); tiada lagi lompatan warna.
+- Blob bergerak: dua bentuk organik (`border-radius` tak simetri + `filter:blur`) yg hanyut dan
+  berombak. Panel 11.5s/15.1s . bar putih 16s (.13) . hero gelap 14s (.42) + 19s (.24).
+  Dinaikkan 50% dua kali daripada asal: jarak hanyutan 2.25x, kelajuan 3.375x.
+- Pembetulan teknik blob: gradien mesti **mencecah 100%** supaya `border-radius` menjadi sempadan
+  sebenar. Kalau gradien pudar sebelum tepi (seperti blob panel), bentuknya kekal bulatan lembut
+  dan putaran tidak membawa perubahan visual - hanya kedudukan bergerak.
+- Hero: `.orb` berhenti `apung 16s` (keyframes `apung` kini tidak digunakan), kini blob hanyut
+  berombak; `.hero:before` ditambah sebagai blob kedua di kiri bawah.
+- Kesan sampingan `overflow:hidden` disemak: bar putih kekal 59px, chip profil dan logo GETB
+  kedua-duanya masih di dalam sempadan.
+- Disahkan: setiap blob dua sampel `transform` berbeza (cth. hero -14.05,37.28 -> -6.35,25.36);
+  0 ralat JS; `prefers-reduced-motion` mematikan semua animasi.
+- NOTA belum selesai: sampel v8 belum dipindahkan ke `index.html`; `v2/` belum masuk git;
+  endpoint Sheet hidup (302 + `Access-Control-Allow-Origin: *`) tetapi skop `userinfo.email`
+  masih belum diberikan, jadi emel notifikasi belum berfungsi.
+
+### 28. P0: og-image sebenar, domain OG, PDPA diperkukuh, Pages dihidupkan — v8.0 / v7.1
+- `og-image.png` (1200x630) dijana dari palet hero (blob maroon) + DP bulat + logo GETB atas plat
+  cerah. Sebelum ini meta menunjuk ke `REPLACE-WITH-PUBLIC-URL/og-image.png` dan **fail itu tidak
+  wujud** - setiap perkongsian di WhatsApp/Facebook/Threads keluar tanpa gambar pratonton.
+- Meta OG/SEO `index.html`: 5 tempat `REPLACE-WITH-PUBLIC-URL` -> domain GitHub Pages sebenar.
+- Baris persetujuan PDPA diperkukuh dalam KEDUA-DUA fail: kini menyebut "termasuk maklumat
+  kesihatan" dan "selaras dengan PDPA 2010". Borang mengumpul Sejarah Penyakit = data peribadi
+  sensitif, yang memerlukan persetujuan nyata di bawah PDPA 2010.
+  **Pembetulan dakwaan awal:** sampel v8 MEMANG ada baris persetujuan (dalam langkah 3, sebelum
+  butang Semak Butiran) - bukan tiada. Ia cuma lebih lemah daripada v1, dan telah dikuatkan.
+- GitHub Pages dihidupkan (branch `main`, root): https://harun-basri.github.io/perunding-takaful-landing/
+- `v2/` dimasukkan ke git; sebelum ini tidak dijejaki langsung (129 KB kerja tanpa kawalan versi).
+- `index.html`, `CHANGELOG.md`, `sheet-backend.gs`, `GOOGLE-SHEET-SETUP.md` di-commit.
+- Ujian endpoint Sheet (curl): POST memulangkan 302 + `Access-Control-Allow-Origin: *` = corak
+  normal Apps Script, jadi **tulisan ke Sheet berfungsi**. GET memulangkan halaman kebenaran
+  Google = skop `userinfo.email` masih belum diberi, jadi **emel notifikasi belum berfungsi**.
+- Baris ujian yang perlu dipadam oleh pemilik dalam Sheet: "UJIAN - ABAIKAN",
+  "Ujian Pelayar Bin Test", dan "UJIAN AUTO ABAIKAN - PADAM" (uji endpoint automatik).

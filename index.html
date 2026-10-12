@@ -8,21 +8,21 @@
 <meta name="theme-color" content="#c41e3a">
 <meta name="format-detection" content="telephone=yes">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c41e3a'/%3E%3Ctext x='32' y='44' font-family='Segoe UI,Arial,sans-serif' font-size='30' font-weight='700' fill='%23fff' text-anchor='middle'%3EHH%3C/text%3E%3C/svg%3E">
-<!-- OG/SEO: ganti REPLACE-WITH-PUBLIC-URL dengan domain sebenar selepas deploy (contoh: https://harun-takaful.netlify.app/) -->
+<!-- OG/SEO: domain sebenar (GitHub Pages) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Perunding Takaful &#8212; Harun Hakimi">
 <meta property="og:title" content="Perunding Takaful &#8212; Harun Hakimi">
 <meta property="og:description" content="Semak kelayakan perlindungan Takaful anda secara percuma. Jawab beberapa soalan, dapatkan sebut harga melalui WhatsApp.">
-<meta property="og:url" content="REPLACE-WITH-PUBLIC-URL/">
-<meta property="og:image" content="REPLACE-WITH-PUBLIC-URL/og-image.png">
+<meta property="og:url" content="https://harun-basri.github.io/perunding-takaful-landing/">
+<meta property="og:image" content="https://harun-basri.github.io/perunding-takaful-landing/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ms_MY">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perunding Takaful &#8212; Harun Hakimi">
 <meta name="twitter:description" content="Semak kelayakan perlindungan Takaful anda secara percuma melalui WhatsApp.">
-<meta name="twitter:image" content="REPLACE-WITH-PUBLIC-URL/og-image.png">
-<link rel="canonical" href="REPLACE-WITH-PUBLIC-URL/">
+<meta name="twitter:image" content="https://harun-basri.github.io/perunding-takaful-landing/og-image.png">
+<link rel="canonical" href="https://harun-basri.github.io/perunding-takaful-landing/">
 <style>
 :root{
   --maroon-1:#8f0f2b;--maroon-2:#c41e3a;--gold:#e8a93c;--cream:#faf3ec;
@@ -463,13 +463,13 @@ select::-ms-expand{display:none}
           <label>Sejarah Penyakit (Jika Ada)</label>
           <textarea id="f_nota" name="nota" maxlength="500" autocapitalize="characters" placeholder="CTH: DARAH TINGGI, KENCING MANIS"></textarea>
         </div><div class="step-nav"><button type="button" class="step-btn back" onclick="stepGo(-1)">&larr; Kembali</button><a href="#" id="waSubmitLink" target="_blank" rel="noopener" role="button" class="submit-btn"><span class="ic"><svg class="isian" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></span> Hantar</a></div>
-        <p class="pdpa">Dengan menekan butang di atas, saya bersetuju maklumat saya diproses untuk tujuan sebutan harga perlindungan Takaful sahaja (PDPA 2010).</p>
+        <p class="pdpa">Dengan menekan butang di atas, saya bersetuju maklumat saya — termasuk maklumat kesihatan — diproses untuk tujuan sebutan harga perlindungan Takaful sahaja, selaras dengan PDPA 2010.</p>
       </div>
         </form>
     </div>
 
 
-    <div class="footer">&#169; 2026 Harun Hakimi. Perunding Takaful Berdaftar &#183; v6.9<br>Great Eastern Takaful Berhad</div>
+    <div class="footer">&#169; 2026 Harun Hakimi. Perunding Takaful Berdaftar &#183; v7.1<br>Great Eastern Takaful Berhad</div>
   </div>
 
 </div>
@@ -913,6 +913,46 @@ function buildMessage(){
   return lines.join("\n");
 }
 
+/* ---------- HANTAR KE GOOGLE SHEET (pilihan) ----------
+   Isi SHEET_URL + SHEET_TOKEN ikut GOOGLE-SHEET-SETUP.md.
+   Kalau SHEET_URL kosong, fungsi ini tidak berbuat apa-apa (mati secara lalai).
+   Sengaja gagal senyap: aliran WhatsApp tidak boleh tersekat kerana simpanan data. */
+const SHEET_URL   = "https://script.google.com/macros/s/AKfycbxmKP52RE85ewEKEIBsdeY_Fd8rXT3HcXf7gpx81lO2C-Val77o-8W9Sca5vPd4rWQ/exec";      /* contoh: "https://script.google.com/macros/s/AKfy.../exec" */
+const SHEET_TOKEN = "tgk_t8h3mfdq6ug4ys54r66e3r25hudwcmps";      /* mesti sama dgn TOKEN dalam sheet-backend.gs */
+
+function dataLead(){
+  return {
+    token: SHEET_TOKEN,
+    nama: titleCase(form.f_nama.value),
+    dob: formatDob(form.f_dob.value),
+    telefon: formatPhone(form.f_phone.value),
+    bandar: titleCase(form.f_bandar.value),
+    negeri: titleCase(form.f_negeri.value),
+    jantina: titleCase(form.f_jantina.value),
+    merokok: titleCase(form.f_merokok.value),
+    berat: form.f_berat.value,
+    tinggi: form.f_tinggi.value,
+    kerja: titleCase(form.f_kerja.value),
+    status: titleCase(form.f_status.value),
+    bajet: formatBajet(form.f_bajet.value),
+    perlindungan: form.f_perlindungan.value,
+    nota: sentenceCase(form.f_nota.value.trim()),
+    bahasa: document.documentElement.lang || 'ms',
+    sumber: location.href.split('#')[0]
+  };
+}
+function hantarKeSheet(){
+  if(!SHEET_URL) return;
+  try{
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',                                  /* Apps Script tak jawab preflight */
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(dataLead())
+    }).catch(function(){});                             /* gagal senyap */
+  }catch(err){}
+}
+
 /* ---------- hantar: validasi penuh, kemudian buka WhatsApp (telefon: app / desktop: WhatsApp Web) ---------- */
 document.getElementById('waSubmitLink').addEventListener('click', function(e){
   /* kemas semua medan sebelum validasi \u2014 tangkap juga nilai yang di-set autofill/paste tanpa event */
@@ -943,6 +983,7 @@ document.getElementById('waSubmitLink').addEventListener('click', function(e){
     return;
   }
   clearError();
+  hantarKeSheet();   /* salinan ke Google Sheet; tidak berbuat apa-apa kalau SHEET_URL kosong */
   /* href di-set secara synchronous \u2014 browser akan ikut link yang betul pada klik pertama.
      Teks mesej diprefill oleh WhatsApp, jadi tiada lagi salin-tampal. */
   const enc = encodeURIComponent(buildMessage());
