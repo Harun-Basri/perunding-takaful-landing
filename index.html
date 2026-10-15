@@ -418,6 +418,10 @@
   input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:0;line-height:1.2}
   input[type="date"]::-webkit-datetime-edit{line-height:1.2}
   /* Butiran penyakit: hanya muncul bila pilih "Ada" — dedah/hilang dgn lembut */
+  /* Jarak antara kumpulan Merokok/Vape dgn Sejarah Penyakit
+     (22px = nilai .tajuk-lbl.bawah halaman ini) */
+  .kumpulan[data-wajib="penyakit"]{margin-top:22px}
+
   #kotakNota{overflow:hidden;max-height:0;opacity:0;margin-top:0;
              transition:max-height .36s var(--lengkung),opacity .28s ease,margin-top .36s var(--lengkung)}
   #kotakNota.buka{max-height:220px;opacity:1;margin-top:12px}
@@ -645,7 +649,6 @@
             <span><b>Tiada</b><small>Sihat</small></span>
           </button>
         </div>
-        <p class="pesan">Sila nyatakan sejarah penyakit</p>
       </div>
       <div class="medan" id="kotakNota">
         <label for="f_nota">Butiran Penyakit</label>
