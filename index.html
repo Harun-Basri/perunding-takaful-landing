@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="description" content="Semak kelayakan perlindungan Takaful anda secara percuma: Medical Card, Hibah Takaful dan Sakit Kritikal. Perunding Takaful berdaftar Great Eastern Takaful.">
 <meta name="theme-color" content="#c41e3a">
 <meta name="format-detection" content="telephone=yes">
@@ -26,7 +26,9 @@
   /* Sentuhan: halang zoom dua-ketik (tak sengaja) pada borang yg byk butang.
      'manipulation' BENARKAN pinch-zoom (penting utk aksesibiliti) tetapi
      matikan double-tap-zoom + buang kelewatan ketik 300ms. */
-  html{touch-action:manipulation}
+  /* Pinch-zoom DIMATIKAN (permintaan pengguna). pan-x pan-y benarkan skrol,
+     tetapi TIDAK termasuk pinch-zoom -> pelayar matikan pinch. */
+  html{touch-action:pan-x pan-y}
 
   :root{
     --ink:#111512; --ink-soft:#1b211d; --ink-muted:#667069;
@@ -1238,6 +1240,23 @@ function pilihFaq(i, segerak){
   senarai.forEach(function(d,i){ var s=d.querySelector('summary'); if(s) s.addEventListener('click',function(e){ e.preventDefault(); /* klik pd soalan yg sudah terbuka = tutup (togol, spt <details> asli) */ pilihFaq(d.classList.contains('buka')?-1:i); }); });
   pilihFaq(0, true);   /* FAQ pertama kekal terbuka tanpa pager */
 
+})();
+</script>
+<script>
+/* Kunci zoom: iOS Safari mengabaikan user-scalable=no, jadi kita halang
+   peristiwa gerak-isyarat WebKit + sentuhan dua jari. Skrol satu jari tidak terjejas. */
+(function(){
+  ['gesturestart','gesturechange','gestureend'].forEach(function(n){
+    document.addEventListener(n, function(e){ e.preventDefault(); }, {passive:false});
+  });
+  document.addEventListener('touchmove', function(e){
+    if(e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false});
+  document.addEventListener('touchstart', function(e){
+    if(e.touches && e.touches.length > 1) e.preventDefault();
+  }, {passive:false});
+  /* Ctrl+scroll (desktop) juga tidak membesarkan */
+  document.addEventListener('wheel', function(e){ if(e.ctrlKey) e.preventDefault(); }, {passive:false});
 })();
 </script>
 <noscript><style>.faq.sedia .faq-a{max-height:none !important;opacity:1 !important}</style></noscript>
