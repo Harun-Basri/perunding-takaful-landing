@@ -417,6 +417,11 @@
   input[type="date"]{-webkit-appearance:none;appearance:none;display:block;min-height:0;line-height:1.2}
   input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:0;line-height:1.2}
   input[type="date"]::-webkit-datetime-edit{line-height:1.2}
+  /* Butiran penyakit: hanya muncul bila pilih "Ada" — dedah/hilang dgn lembut */
+  #kotakNota{overflow:hidden;max-height:0;opacity:0;margin-top:0;
+             transition:max-height .36s var(--lengkung),opacity .28s ease,margin-top .36s var(--lengkung)}
+  #kotakNota.buka{max-height:220px;opacity:1;margin-top:12px}
+
 @media (hover:none) and (pointer:coarse){
     .medan input,.medan select,.medan textarea,input,select,textarea{font-size:16px}
   }
@@ -628,10 +633,23 @@
         </button>
         </div>
       </div>
-
-      <div class="medan" style="margin-top:16px">
-        <label for="f_nota">Sejarah Penyakit</label>
-        <textarea required id="f_nota" placeholder="Contoh: Darah tinggi sejak 2021 - tulis Tiada jika tiada"></textarea>
+      <div class="kumpulan" data-wajib="penyakit">
+        <span class="lbl tajuk-lbl">Sejarah Penyakit</span>
+        <div class="chip2">
+          <button class="kad" aria-pressed="false" data-nilai="Ada">
+            <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h4l2-5 3 10 2-5h7"/></svg></span>
+            <span><b>Ada</b><small>Ada penyakit</small></span>
+          </button>
+          <button class="kad" aria-pressed="true" data-nilai="Tiada">
+            <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+            <span><b>Tiada</b><small>Sihat</small></span>
+          </button>
+        </div>
+        <p class="pesan">Sila nyatakan sejarah penyakit</p>
+      </div>
+      <div class="medan" id="kotakNota">
+        <label for="f_nota">Butiran Penyakit</label>
+        <textarea id="f_nota" placeholder="Contoh: Darah tinggi sejak 2021"></textarea>
       </div>
 
       <div class="kaki">
@@ -756,6 +774,7 @@
       }
       nilaiBtn.setAttribute('aria-pressed','true');
       if(kunci){ nilai[kunci]=nilaiBtn.dataset.nilai; kumpulan.classList.remove('salah');
+                 if(kunci==='penyakit') tunjukNota(nilai[kunci]==='Ada');
                  var ps=kumpulan.querySelector('.pesan'); if(ps) ps.classList.remove('tunjuk'); }
       return;
     }
@@ -897,6 +916,14 @@
   var WA_DEEP='whatsapp://send?phone='+AGENT_WA+'&text=';
   var WA_PAGE='https://api.whatsapp.com/send?phone='+AGENT_WA+'&text=';
   function isMobileWA(){ return /Android|iPhone|iPad|iPod|Windows Phone|IEMobile|BlackBerry|Opera Mini/i.test(navigator.userAgent); }
+  /* Butiran penyakit muncul/hilang dgn lembut. Bila pilih "Tiada",
+     kotak dikosongkan supaya butiran lama tidak terhantar. */
+  function tunjukNota(b){
+    var kotak=document.getElementById('kotakNota'); if(!kotak) return;
+    if(b) kotak.classList.add('buka'); else kotak.classList.remove('buka');
+    if(!b){ var ta=document.getElementById('f_nota'); if(ta) ta.value=''; }
+  }
+
   function waHref(){ return (isMobileWA()?WA_PAGE:WA_WEB)+encodeURIComponent(binaMesej()); }
 
   function formatDob(iso){
@@ -913,31 +940,49 @@
   }
 
   function binaMesej(){
+    /* Susunan SAMA spt tab Semak: 3 seksyen, label sama.
+       Emoji hanya pd 3 tajuk seksyen (Pelan / Diri / Kesihatan). */
+    var sekat=[
+      ['\uD83D\uDEE1\uFE0F','Pelan', [
+        ['Perlindungan', nilai.perlindungan],
+        ['Bajet / bulan', nilai.bajet]
+      ]],
+      ['\uD83D\uDC64','Diri', [
+        ['Nama', v('f_nama')],
+        ['Tarikh Lahir', formatDob(v('f_dob'))],
+        ['No Telefon', v('f_phone') ? formatHp(v('f_phone')) : ''],
+        ['Jantina', nilai.jantina],
+        ['Berat', v('f_berat') ? v('f_berat')+' kg' : ''],
+        ['Tinggi', v('f_tinggi') ? v('f_tinggi')+' cm' : ''],
+        ['Lokasi', [v('f_bandar'),v('f_negeri')].filter(Boolean).join(', ')],
+        ['Status', nilai.status],
+        ['Pekerjaan', v('f_kerja')]
+      ]],
+      ['\uD83E\uDE7A','Kesihatan', [
+        ['Merokok / Vape', nilai.merokok],
+        ['Sejarah Penyakit', (nilai.penyakit||'') + (v('f_nota') ? ' \u2014 ' + v('f_nota') : '')]
+      ]]
+    ];
     var L=[];
     L.push("Assalamualaikum, saya berminat untuk *semak kelayakan* & *cadangan pelan Takaful.*");
-    L.push(""); L.push("Berikut adalah butiran saya:"); L.push("");
-    L.push("\uD83D\uDC64 *Nama* : " + (v('f_nama')||'-'));
-    L.push("\uD83C\uDF82 *DOB* : " + (formatDob(v('f_dob'))||'-'));
-    L.push("\uD83D\uDCF1 *Phone*: " + (v('f_phone')?formatHp(v('f_phone')):'-'));
-    L.push("\uD83D\uDCCD *Lokasi*: " + ([v('f_bandar'),v('f_negeri')].filter(Boolean).join(', ')||'-'));
-    L.push("\uD83D\uDEB9 *Jantina*: " + (nilai.jantina||'-'));
-    L.push("\uD83D\uDEAC *Merokok / Vape*: " + (nilai.merokok||'-'));
-    L.push("\u2696\uFE0F *Berat*: " + (v('f_berat')?v('f_berat')+" kg":"-"));
-    L.push("\uD83D\uDCCF *Tinggi*: " + (v('f_tinggi')?v('f_tinggi')+" cm":"-"));
-    L.push("\uD83D\uDCBC *Kerja*: " + (v('f_kerja')||'-'));
-    L.push("\uD83D\uDC8D *Status*: " + (nilai.status||'-'));
-    L.push("\uD83D\uDCB5 *Bajet/bulan*: " + (nilai.bajet||'-'));
-    L.push("\uD83D\uDEE1\uFE0F *Nak cover* : " + (nilai.perlindungan||'-'));
-    if(v('f_nota')){ L.push(""); L.push("\uD83D\uDCDD *Sejarah Penyakit*: " + v('f_nota')); }
+    L.push(""); L.push("Berikut adalah butiran saya:");
+    sekat.forEach(function(s){
+      var rows=s[2].filter(function(r){ return r[1]; });
+      if(!rows.length) return;
+      L.push(""); L.push(s[0]+" *"+s[1]+"*");
+      rows.forEach(function(r){ L.push(r[0]+" : "+r[1]); });
+    });
     return L.join("\n");
   }
 
   /* ---------- semua medan wajib ---------- */
   var WAJIB={1:['perlindungan','bajet'],
              2:['f_nama','f_dob','f_phone','jantina','f_berat','f_tinggi','kawasan','status','f_kerja'],
-             3:['merokok','f_nota']};
+             3:['merokok','penyakit']};
 
   function kosong(k){
+    /* f_nota hanya wajib bila pengguna pilih "Ada" */
+    if(k==='f_nota') return (nilai.penyakit==='Ada') && !String((document.getElementById('f_nota')||{}).value||'').trim();
     var el=document.getElementById(k);
     if(el) return !String(el.value).trim();
     var g=document.querySelector('.kumpulan[data-wajib="'+k+'"]');
@@ -1022,7 +1067,7 @@
       ]],
       ['Kesihatan', 3, 'merokok', [
         ['Merokok / Vape', nilai.merokok],
-        ['Sejarah Penyakit', v('f_nota')]
+        ['Sejarah Penyakit', (nilai.penyakit||'') + (v('f_nota') ? ' \u2014 ' + v('f_nota') : '')]
       ]]
     ];
     document.getElementById('ringkas').innerHTML=sekat.map(function(s){
@@ -1058,7 +1103,7 @@
       status: nilai.status || '',
       bajet: nilai.bajet || '',
       perlindungan: nilai.perlindungan || '',
-      nota: v('f_nota'),
+      nota: (nilai.penyakit||'') + (v('f_nota') ? ' \u2014 ' + v('f_nota') : ''),
       bahasa: document.documentElement.lang || 'ms',
       sumber: location.href.split('#')[0]
     };
