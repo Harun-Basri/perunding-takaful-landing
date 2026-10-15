@@ -405,6 +405,12 @@
         padding:26px 18px calc(30px + env(safe-area-inset-bottom,0px));
         border-top:1px solid var(--line);margin-top:10px}
   .footer b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--maroon-gelap)}
+
+  /* iOS Safari zoom masuk seluruh halaman bila medan < 16px.
+     Peranti sentuh sahaja -> rupa desktop tidak berubah. */
+  @media (hover:none) and (pointer:coarse){
+    .medan input,.medan select,.medan textarea,input,select,textarea{font-size:16px}
+  }
 </style>
 </head>
 <body>
