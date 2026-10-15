@@ -410,7 +410,14 @@
 
   /* iOS Safari zoom masuk seluruh halaman bila medan < 16px.
      Peranti sentuh sahaja -> rupa desktop tidak berubah. */
-  @media (hover:none) and (pointer:coarse){
+  
+  /* iOS memberi kawalan tarikh tinggi sendiri (Chrome pun +2px).
+     Kunci tinggi semua medan + normalise dalaman kawalan tarikh. */
+  .medan input,.medan select{height:42px;box-sizing:border-box}
+  input[type="date"]{-webkit-appearance:none;appearance:none;display:block;min-height:0;line-height:1.2}
+  input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:0;line-height:1.2}
+  input[type="date"]::-webkit-datetime-edit{line-height:1.2}
+@media (hover:none) and (pointer:coarse){
     .medan input,.medan select,.medan textarea,input,select,textarea{font-size:16px}
   }
 </style>
