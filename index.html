@@ -455,6 +455,10 @@
   .bulat{color:#4f584f}                 /* 4.27:1 -> 6.06:1 */
   .tanda{color:#4f584f}                 /* 4.27:1 -> 6.06:1 */
   .hero .lbl{color:#f07a8e}             /* 4.17:1 -> 7.34:1 pada latar gelap */
+
+  .bintang{color:var(--maroon-terang);font-weight:700}
+  .nota-wajib{display:none;margin:7px 0 0;font-size:11px;line-height:1.4;color:#8d2614}
+  #kotakNota.buka .nota-wajib{display:block}
 </style>
 </head>
 <body>
@@ -678,8 +682,9 @@
         </div>
       </div>
       <div class="medan" id="kotakNota">
-        <label for="f_nota">Butiran Penyakit</label>
+        <label for="f_nota">Butiran Penyakit <span class="bintang">*</span></label>
         <textarea id="f_nota" maxlength="600" placeholder="Contoh: Darah tinggi sejak 2021"></textarea>
+        <p class="nota-wajib">Wajib diisi sebelum anda boleh ke tab Semak.</p>
       </div>
 
       <div class="kaki">
@@ -1024,7 +1029,7 @@
   /* ---------- semua medan wajib ---------- */
   var WAJIB={1:['perlindungan','bajet'],
              2:['f_nama','f_dob','f_phone','jantina','f_berat','f_tinggi','kawasan','status','f_kerja'],
-             3:['merokok','penyakit']};
+             3:['merokok','penyakit','f_nota']};
 
   function kosong(k){
     /* f_nota hanya wajib bila pengguna pilih "Ada" */
@@ -1070,7 +1075,7 @@
 
   var NAMA_MEDAN={perlindungan:'Pilihan perlindungan',bajet:'Bajet bulanan',f_nama:'Nama penuh',
     f_dob:'Tarikh lahir',f_phone:'No telefon',jantina:'Jantina',f_berat:'Berat badan',f_tinggi:'Tinggi',
-    kawasan:'Negeri / bandar',status:'Status',f_kerja:'Pekerjaan',merokok:'Merokok / Vape',f_nota:'Sejarah penyakit'};
+    kawasan:'Negeri / bandar',status:'Status',f_kerja:'Pekerjaan',f_nota:'Butiran penyakit',merokok:'Merokok / Vape',f_nota:'Sejarah penyakit'};
   var SEKAT={1:'Pelan',2:'Diri',3:'Kesihatan'};
 
   function semuaSah(){
@@ -1095,7 +1100,13 @@
         return '<li class="anak">'+t+'</li>'; }).join('');
     }).join('');
     document.getElementById('popup').classList.add('aktif');
-    document.getElementById('popupPergi').onclick=function(){ tutupPopup(); pergi(r.pertama||1); };
+    document.getElementById('popupPergi').onclick=function(){
+      tutupPopup(); pergi(r.pertama||1);
+      setTimeout(function(){
+        var f=document.querySelector('.medan.salah input,.medan.salah textarea,.medan.salah select');
+        if(f) try{ f.focus(); }catch(e){}
+      }, 80);
+    };
   }
   function tutupPopup(){ document.getElementById('popup').classList.remove('aktif'); }
   document.getElementById('popupTutup').addEventListener('click',tutupPopup);
