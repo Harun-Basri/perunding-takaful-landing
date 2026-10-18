@@ -418,6 +418,16 @@
   input[type="date"]::-webkit-date-and-time-value{text-align:left;min-height:0;line-height:1.2}
   input[type="date"]::-webkit-datetime-edit{line-height:1.2}
   /* Butiran penyakit: hanya muncul bila pilih "Ada" — dedah/hilang dgn lembut */
+  /* perangkap bot: tak kelihatan, tapi bot akan isi */
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  /* status penghantaran lead */
+  .hantar-status{display:none;margin:0 0 12px;padding:10px 12px;border-left:3px solid transparent;
+    font-family:var(--sans);font-size:12.5px;line-height:1.5;text-align:left;border-radius:0 8px 8px 0}
+.hantar-status.tunjuk{display:block}
+.hantar-status[data-keadaan="menghantar"]{color:var(--ink-muted);border-left-color:var(--line-dark);background:#f4ece4}
+.hantar-status[data-keadaan="ok"]{color:#245a3a;border-left-color:#3d8a5f;background:#eef6f0}
+.hantar-status[data-keadaan="gagal"]{color:#8d2614;border-left-color:#a3301c;background:#fdeeea;font-weight:600}
+
   /* Bajet: "Bawah RM100" hanya bermakna utk Hibah. Medical Card / Sakit Kritikal
      dapat 3 pilihan; kad itu muncul lembut bila pengguna pilih Hibah. */
   .kumpulan[data-wajib="bajet"] .kad.bawah100{
@@ -525,6 +535,7 @@
   <main class="panel">
 
     <section class="langkah-panel aktif" id="l1" role="tabpanel">
+      <div class="hp" aria-hidden="true"><label>Jangan isi medan ini</label><input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off"></div>
       <span class="lbl tajuk-lbl">Pilihan Perlindungan</span>
       <div class="kumpulan" data-wajib="perlindungan">
         <button class="kad" aria-pressed="true" data-nilai="Medical Card">
@@ -572,10 +583,10 @@
     </section>
 
     <section class="langkah-panel" id="l2" role="tabpanel">
-      <div class="medan"><label for="f_nama">Nama Penuh</label><input required id="f_nama" placeholder="Samad Bin Said" autocomplete="name"></div>
+      <div class="medan"><label for="f_nama">Nama Penuh</label><input required id="f_nama" maxlength="80" placeholder="Samad Bin Said" autocomplete="name"></div>
       <div class="grid2">
         <div class="medan"><label for="f_dob">Tarikh Lahir</label><input required id="f_dob" type="date"></div>
-        <div class="medan"><label for="f_phone">No Telefon</label><input required id="f_phone" inputmode="numeric" placeholder="0123456789"></div>
+        <div class="medan"><label for="f_phone">No Telefon</label><input required id="f_phone" maxlength="12" inputmode="numeric" placeholder="0123456789"></div>
       </div>
 
       <div class="kumpulan" data-wajib="jantina">
@@ -593,8 +604,8 @@
       </div>
 
       <div class="grid2" style="margin-top:14px">
-        <div class="medan"><label for="f_berat">Berat (kg)</label><input required id="f_berat" inputmode="numeric" placeholder="70"></div>
-        <div class="medan"><label for="f_tinggi">Tinggi (cm)</label><input required id="f_tinggi" inputmode="numeric" placeholder="170"></div>
+        <div class="medan"><label for="f_berat">Berat (kg)</label><input required id="f_berat" maxlength="3" inputmode="numeric" placeholder="70"></div>
+        <div class="medan"><label for="f_tinggi">Tinggi (cm)</label><input required id="f_tinggi" maxlength="3" inputmode="numeric" placeholder="170"></div>
       </div>
 
       <div class="kumpulan" data-wajib="kawasan">
@@ -626,7 +637,7 @@
         <p class="pesan">Sila pilih status</p>
       </div>
 
-      <div class="medan" style="margin-top:14px"><label for="f_kerja">Pekerjaan</label><input required id="f_kerja" placeholder="Jurutera"></div>
+      <div class="medan" style="margin-top:14px"><label for="f_kerja">Pekerjaan</label><input required id="f_kerja" maxlength="60" placeholder="Jurutera"></div>
 
       <div class="kaki">
         <button class="btn kembali" data-kembali>&#8592; Kembali</button>
@@ -663,7 +674,7 @@
       </div>
       <div class="medan" id="kotakNota">
         <label for="f_nota">Butiran Penyakit</label>
-        <textarea id="f_nota" placeholder="Contoh: Darah tinggi sejak 2021"></textarea>
+        <textarea id="f_nota" maxlength="600" placeholder="Contoh: Darah tinggi sejak 2021"></textarea>
       </div>
 
       <div class="kaki">
@@ -680,6 +691,7 @@
       <h3>Siap. Semak dahulu.</h3>
       <p>Klik <b>Ubah</b> untuk sebarang perubahan.</p>
       <div class="ringkas" id="ringkas"></div>
+      <p class="hantar-status" id="hantarStatus" role="status" aria-live="polite"></p>
       <div class="tindakan">
         <a class="wa" id="waHantar" href="#" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2m0 18.15c-1.5 0-2.98-.4-4.27-1.16l-.31-.18-3.12.82.83-3.04-.2-.32a8.2 8.2 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.24-8.23s8.23 3.69 8.23 8.23-3.69 8.24-8.14 8.24m4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.17-.47-.29" fill="currentColor"/></svg>
@@ -773,7 +785,7 @@
     }
     tab.forEach(function(b){ b.setAttribute('aria-selected', String(+b.dataset.pergi===n)); });
     garis.style.transform='translateX('+((n-1)*100)+'%)';
-    if(n===4) binaSemak();
+    if(n===4){ binaSemak(); hantarKeSheet(); }   /* simpan sebaik semakan dipaparkan */
     ruangBar();
     kemasKiniPct(n===1?10:(n===2?40:(n===3?70:100)));
   }
@@ -1013,7 +1025,15 @@
     /* f_nota hanya wajib bila pengguna pilih "Ada" */
     if(k==='f_nota') return (nilai.penyakit==='Ada') && !String((document.getElementById('f_nota')||{}).value||'').trim();
     var el=document.getElementById(k);
-    if(el) return !String(el.value).trim();
+    if(el){
+      var t=String(el.value||'').trim();
+      if(!t) return true;
+      if(k==='f_phone'){ var d=t.replace(/\D/g,''); return d.length<9 || d.length>11; }
+      if(k==='f_berat'){ var b=parseFloat(t); return !isFinite(b) || b<30 || b>250; }
+      if(k==='f_tinggi'){ var g=parseFloat(t); return !isFinite(g) || g<120 || g>220; }
+      if(k==='f_nama' && t.length<3) return true;
+      return false;
+    }
     var g=document.querySelector('.kumpulan[data-wajib="'+k+'"]');
     if(!g) return false;
     if(k==='kawasan') return !(selNegeri.value && selBandar.value);
@@ -1134,22 +1154,71 @@
       perlindungan: nilai.perlindungan || '',
       nota: (nilai.penyakit||'') + (v('f_nota') ? ' \u2014 ' + v('f_nota') : ''),
       bahasa: document.documentElement.lang || 'ms',
-      sumber: location.href.split('#')[0]
+      sumber: location.origin + location.pathname   /* tanpa ?v= — atribusi kempen bersih */
     };
+  }
+  /* ---------- penghantaran tahan gagal ----------
+     no-cors bermakna status respons tidak boleh dibaca. Yang kita boleh: simpan
+     lead ke peranti DAHULU, hantar, cuba semula bila rangkaian gagal, dan beritahu
+     pengguna bila gagal supaya dia boleh guna WhatsApp sebagai saluran sandaran. */
+  var GILIRAN='gtb_lead_v1';
+  function bacaGiliran(){ try{ var a=JSON.parse(localStorage.getItem(GILIRAN)||'[]'); return Array.isArray(a)?a:[]; }catch(e){ return []; } }
+  function tulisGiliran(a){ try{ localStorage.setItem(GILIRAN, JSON.stringify(a.slice(-15))); }catch(e){} }
+  function simpanGiliran(data){
+    var id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    var a=bacaGiliran(); a.push({id:id,data:data}); tulisGiliran(a); return id;
+  }
+  function buangGiliran(id){
+    tulisGiliran(bacaGiliran().filter(function(x){ return x.id!==id; }));
+  }
+  function hantarData(data,cubaan){
+    cubaan=cubaan||0;
+    var kawalan=(typeof AbortController!=='undefined')?new AbortController():null;
+    var jam=kawalan?setTimeout(function(){ try{ kawalan.abort(); }catch(e){} },12000):null;
+    return fetch(SHEET_URL,{
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify(data),
+        signal:kawalan?kawalan.signal:undefined
+      })
+      .then(function(){ if(jam) clearTimeout(jam); return true; })
+      .catch(function(){
+        if(jam) clearTimeout(jam);
+        if(cubaan>=2) return false;
+        return new Promise(function(r){ setTimeout(r,(cubaan+1)*2500); })
+               .then(function(){ return hantarData(data,cubaan+1); });
+      });
+  }
+  function statusHantar(keadaan){
+    var el=document.getElementById('hantarStatus'); if(!el) return;
+    el.setAttribute('data-keadaan',keadaan);
+    el.textContent = keadaan==='ok' ? 'Butiran anda tersimpan.'
+      : keadaan==='gagal' ? 'Sambungan gagal. Butiran disimpan di peranti ini dan akan dihantar semula. Tekan butang WhatsApp supaya saya tetap terima.'
+      : keadaan==='menghantar' ? 'Menghantar butiran...' : '';
+    el.classList.toggle('tunjuk',keadaan!=='');
+  }
+  function cubaGiliranTertunggak(){
+    if(_sudahHantar) return;   /* jangan bertindih dgn cubaan yg sedang berjalan */
+    bacaGiliran().forEach(function(item){
+      hantarData(item.data).then(function(ok){ if(ok) buangGiliran(item.id); });
+    });
   }
   function hantarKeSheet(){
     if(!SHEET_URL || _sudahHantar) return;
-    _sudahHantar = true;                 /* elak baris berganda kalau butang diklik dua kali */
-    try{
-      fetch(SHEET_URL, {
-        method:'POST', mode:'no-cors',
-        headers:{'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify(dataLead())
-      }).catch(function(){});
-    }catch(e){}
+    var jebak=document.getElementById('f_website');
+    if(jebak && String(jebak.value||'').trim()!==''){ _sudahHantar=true; return; }
+    _sudahHantar=true;
+    var data=dataLead();
+    var id=simpanGiliran(data);
+    statusHantar('menghantar');
+    hantarData(data).then(function(ok){
+      if(ok){ buangGiliran(id); statusHantar('ok'); }
+      else { statusHantar('gagal'); }
+    });
   }
 
   pergi(1);
+  setTimeout(cubaGiliranTertunggak, 4000);
 })();
 </script>
 <script>
