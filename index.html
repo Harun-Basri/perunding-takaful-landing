@@ -127,8 +127,8 @@
        background:var(--paper-deep);color:var(--ink-muted);font-family:var(--mono);font-size:10px;
        transition:background var(--laju) var(--lengkung),color var(--laju) var(--lengkung)}
   .langkah button[aria-selected="true"] .bulat{background:var(--maroon);color:var(--white)}
-  .langkah .garis{position:absolute;bottom:0;height:2px;width:calc(100% / 4 - 8px);left:4px;background:var(--maroon-gelap);
-       transition:transform .38s var(--lengkung)}
+  .langkah .garis{position:absolute;bottom:0;height:2px;width:calc(100% / 4 - 36px);left:18px;
+       background:var(--maroon-gelap);border-radius:2px;transition:transform .38s var(--lengkung)}
 
   /* ---------- panel ---------- */
   .panel{position:relative;padding:20px 20px 26px}
@@ -794,7 +794,7 @@
       if(k!==n) document.getElementById(panel[k]).classList.remove('aktif');
     }
     tab.forEach(function(b){ b.setAttribute('aria-selected', String(+b.dataset.pergi===n)); });
-    garis.style.transform='translateX('+((n-1)*100)+'%)';
+    garis.style.transform='translateX('+tab[n-1].offsetLeft+'px)';   /* ikut kolum sebenar, bukan lebar bar */
     if(n===4){ binaSemak(); hantarKeSheet(); }   /* simpan sebaik semakan dipaparkan */
     ruangBar();
     kemasKiniPct(n===1?10:(n===2?40:(n===3?70:100)));
