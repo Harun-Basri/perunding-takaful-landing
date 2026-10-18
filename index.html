@@ -73,7 +73,7 @@
         background-image:var(--getb);background-size:contain;background-repeat:no-repeat;
         background-position:center right;background-origin:border-box;background-clip:border-box;
         pointer-events:none}
-  .chip{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);
+  .chip{margin-left:auto;display:flex;align-items:center;gap:8px;min-height:44px;background:rgba(255,255,255,.05);
         border:1px solid var(--line-dark);border-radius:999px;padding:5px 11px 5px 5px}
   .chip b{font-size:12px;font-weight:700;color:var(--white)}
   .dp{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#d92b47,#8f0f2b);
@@ -450,6 +450,11 @@
 @media (hover:none) and (pointer:coarse){
     .medan input,.medan select,.medan textarea,input,select,textarea{font-size:16px}
   }
+
+  /* ---------- kontras AA (audit) ---------- */
+  .bulat{color:#4f584f}                 /* 4.27:1 -> 6.06:1 */
+  .tanda{color:#4f584f}                 /* 4.27:1 -> 6.06:1 */
+  .hero .lbl{color:#f07a8e}             /* 4.17:1 -> 7.34:1 pada latar gelap */
 </style>
 </head>
 <body>
@@ -1216,6 +1221,15 @@
       else { statusHantar('gagal'); }
     });
   }
+
+  /* semantik: pembaca skrin mendengar satu kumpulan, bukan 27 butang bertaburan */
+  var NAMA_KUMPULAN={perlindungan:'Pilihan perlindungan',bajet:'Bajet bulanan',jantina:'Jantina',
+    kawasan:'Negeri dan bandar',status:'Status',merokok:'Merokok atau vape',penyakit:'Sejarah penyakit'};
+  document.querySelectorAll('.kumpulan[data-wajib]').forEach(function(g){
+    var k=g.getAttribute('data-wajib');
+    g.setAttribute('role','group');
+    if(!g.getAttribute('aria-label')) g.setAttribute('aria-label', NAMA_KUMPULAN[k]||k);
+  });
 
   pergi(1);
   setTimeout(cubaGiliranTertunggak, 4000);
