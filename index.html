@@ -172,7 +172,9 @@
 
   /* kad pilihan kecil — bahasa visual yg sama spt kad Pilihan Perlindungan */
   /* kumpulan Pilihan Perlindungan: grid satu lajur, jarak sama spt kad Bajet */
-  .kumpulan[data-wajib="perlindungan"],.kumpulan[data-wajib="bajet"]{display:grid;gap:8px}
+  .kumpulan[data-wajib="bajet"]{display:grid;gap:8px}
+  .kumpulan[data-wajib="perlindungan"]{display:block}
+  .kumpulan[data-wajib="perlindungan"] > .kad{margin:0 0 8px;position:relative}
   .chip2 .kad,.chip3 .kad,.bajet .kad,.kumpulan > .kad{margin-bottom:0;padding:10px 11px;gap:9px;border-radius:var(--r-sm)}
   .chip2 .kad .ikon,.chip3 .kad .ikon,.bajet .kad .ikon,.kumpulan > .kad .ikon{flex:0 0 32px;width:32px;height:32px;border-radius:9px}
   .chip2 .kad .ikon svg,.chip3 .kad .ikon svg,.bajet .kad .ikon svg,.kumpulan > .kad .ikon svg{width:16px;height:16px}
@@ -459,6 +461,19 @@
   .bintang{color:var(--maroon-terang);font-weight:700}
   .nota-wajib{display:none;margin:7px 0 0;font-size:11px;line-height:1.4;color:#8d2614}
   #kotakNota.buka .nota-wajib{display:block}
+
+  /* ---------- kepingan bersambung (puzzle) ---------- */
+  .hint-pilih{margin:-2px 0 12px;font-family:var(--sans);font-size:11.5px;line-height:1.45;color:var(--ink-muted)}
+  .kumpulan[data-wajib="perlindungan"] > .kad{
+    transition:border-radius .22s var(--lengkung),margin .22s var(--lengkung),border-color var(--laju) var(--lengkung)}
+  .kad.sambung-atas{
+    border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:-1px !important;z-index:2}
+  .kad.sambung-bawah{
+    border-top-left-radius:0;border-top-right-radius:0}
+  .kad.sambung-atas::after{      /* tombol puzzle tepat pada sambungan */
+    content:'';position:absolute;left:50%;bottom:-8px;margin-left:-8px;width:16px;height:16px;
+    border-radius:50%;background:var(--white);border:1px solid var(--ink);box-sizing:border-box;
+    z-index:3;pointer-events:none}
 </style>
 </head>
 <body>
@@ -546,6 +561,7 @@
     <section class="langkah-panel aktif" id="l1" role="tabpanel">
       <div class="hp" aria-hidden="true"><label>Jangan isi medan ini</label><input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off"></div>
       <span class="lbl tajuk-lbl">Pilihan Perlindungan</span>
+      <p class="hint-pilih">Boleh pilih lebih daripada satu</p>
       <div class="kumpulan" data-wajib="perlindungan">
         <button class="kad" aria-pressed="true" data-nilai="Medical Card">
           <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/><path d="M12 9v6M9 12h6"/></svg></span>
@@ -986,7 +1002,23 @@
     });
     g.classList.remove('salah');
     var ps=g.querySelector('.pesan'); if(ps) ps.classList.remove('tunjuk');
+    susunSambungan();
     tukarBajet();
+  }
+
+  /* Kepingan bercantum hanya bila dua kad produk bersebelahan kedua-duanya dipilih.
+     "Tidak Pasti Lagi" tidak pernah bercantum kerana ia berdiri sendiri. */
+  function susunSambungan(){
+    var g=document.querySelector('.kumpulan[data-wajib="perlindungan"]'); if(!g) return;
+    var produk=[].slice.call(g.querySelectorAll('.kad[data-nilai]')).filter(function(k){
+      return k.dataset.nilai!=='Tidak Pasti Lagi'; });
+    produk.forEach(function(k){ k.classList.remove('sambung-atas','sambung-bawah'); });
+    for(var i=0;i<produk.length-1;i++){
+      var a=produk[i], b=produk[i+1];
+      if(a.getAttribute('aria-pressed')==='true' && b.getAttribute('aria-pressed')==='true'){
+        a.classList.add('sambung-atas'); b.classList.add('sambung-bawah');
+      }
+    }
   }
 
   /* "Bawah RM100" hanya masuk akal bila tiada kad perubatan / sakit kritikal. */
