@@ -746,7 +746,7 @@
   </main>
 
 <style>
-/* ---------- kalkulator anggaran caruman (i-Medi Evolusi) ---------- */
+/* ---------- kalkulator anggaran caruman (jadual tunggal + sorotan) ---------- */
   .kal{padding:24px 20px 0}
   .kal-kad{background:var(--white);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 15px 15px}
   .kal .lbl{display:block}
@@ -760,28 +760,32 @@
     border-radius:var(--r-sm);padding:0 34px 0 12px;font:600 13.5px var(--sans);color:var(--ink);appearance:none;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23667069' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
     background-repeat:no-repeat;background-position:right 12px center}
-  .kal-harga{display:flex;gap:8px;margin:12px 0 0}
-  .kal-harga>div{flex:1 1 0;min-width:0;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r-sm);padding:11px 9px;text-align:center}
-  .kal-pakej{font:600 9px var(--mono);letter-spacing:.12em;color:var(--ink-muted)}
-  .kal-rm{font:700 23px var(--sans);color:var(--maroon);line-height:1.2;letter-spacing:-.5px;margin:2px 0 0}
-  .kal-bln{font:600 8.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted)}
-  .kal-had{font:400 8.5px var(--sans);color:var(--ink-muted);margin:5px 0 0;line-height:1.35}
-  .kal-beza{margin:8px 0 0;font:600 11px var(--sans);color:var(--maroon-terang);text-align:center}
-  .kal-thn{margin:4px 0 0;font:400 9.5px var(--sans);color:var(--ink-muted);text-align:center;line-height:1.45}
   .kal-notis{margin:12px 0 0;padding:11px 12px;background:var(--paper);border:1px solid var(--line);
     border-left:3px solid var(--gold);border-radius:var(--r-sm);font:400 11px var(--sans);line-height:1.5}
-  .kal-jadual{margin:13px 0 0;border-top:1px solid var(--line);padding-top:10px}
-  .kal-jadual summary{font:600 11px var(--sans);color:var(--maroon);cursor:pointer;list-style:none}
-  .kal-jadual summary::-webkit-details-marker{display:none}
-  .kal-jadual summary::before{content:"\25B8";color:var(--maroon-terang);margin-right:6px}
-  .kal-jadual[open] summary::before{content:"\25BE"}
-  .kal-jadual table{width:100%;border-collapse:collapse;margin:8px 0 0;font:400 10px var(--sans)}
-  .kal-jadual th,.kal-jadual td{padding:4px 3px;border-bottom:1px solid #eeece2;text-align:right}
-  .kal-jadual th:first-child,.kal-jadual td:first-child{text-align:left;font-family:var(--mono);font-size:9.5px}
-  .kal-jadual thead th{font:600 8.5px var(--mono);letter-spacing:.06em;color:var(--ink-muted);border-bottom:1px solid var(--line)}
-  .kal-jadual .kap{font:600 9px var(--mono);letter-spacing:.1em;color:var(--ink-muted);margin:9px 0 0}
-  .kal-halus{font:400 9.5px var(--sans);line-height:1.55;color:var(--ink-muted);margin:11px 0 0}
+  .kal-beza{margin:10px 0 0;font:600 10.5px var(--sans);color:var(--maroon-terang)}
+  .kal-bungkus{margin:12px 0 0}
+  table.kal-jadual{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;
+    font:400 10px var(--sans);color:var(--ink)}
+  .kal-jadual caption{caption-side:top;text-align:left;font:600 8.5px var(--mono);letter-spacing:.1em;
+    color:var(--ink-muted);padding:0 0 6px}
+  .kal-jadual th,.kal-jadual td{padding:5px 3px;text-align:right;border-bottom:1px solid #eeece2;
+    transition:opacity .18s var(--lengkung),background-color .18s var(--lengkung),color .18s var(--lengkung)}
+  .kal-jadual th:first-child,.kal-jadual td:first-child{text-align:left;font-family:var(--mono);font-size:9.5px;padding-left:1px}
+  .kal-jadual thead th{font:600 8.5px var(--mono);letter-spacing:.06em;color:var(--ink-muted);
+    border-bottom:1px solid var(--line);padding:3px 3px}
+  .kal-jadual thead th.kepala-gender{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);padding-top:1px}
+  .kal-jadual tbody th{font:400 9.5px var(--mono);color:var(--ink-muted)}
+  .kal-jadual td.pudar{color:var(--ink-muted);font-weight:400}
+  .kal-jadual thead th.pudar{color:#9aa39d}
+  .kal-jadual tr.aktif td,.kal-jadual tr.aktif th{background:#e9f3ee}
+  .kal-jadual tr.aktif th:first-child,.kal-jadual tr.aktif td:first-child{font-weight:700;color:var(--ink);
+    box-shadow:inset 3px 0 0 var(--maroon)}
+  .kal-jadual td.kotak{background:var(--white);font:700 11px var(--sans);color:var(--maroon);
+    box-shadow:inset 0 0 0 2px var(--maroon);border-radius:4px}
+  .kal-jadual thead th.aktif-gender,.kal-jadual thead th.kepala-gender.aktif-gender{color:var(--maroon)}
+  .kal-nota{margin:9px 0 0;font:400 9.5px var(--sans);line-height:1.5;color:var(--ink-muted)}
+  .kal-nota b{color:var(--ink);font-weight:600}
+  .kal-halus{font:400 9.5px var(--sans);line-height:1.55;color:var(--ink-muted);margin:10px 0 0}
   .kal .wa{margin-top:12px}
   .kal-kaki{margin:9px 0 0;font:400 8.5px var(--mono);letter-spacing:.04em;color:var(--ink-muted);text-align:center}
 </style>
@@ -798,19 +802,28 @@
 
     <select id="kal-umur" aria-label="Jalur umur"></select>
 
-    <div class="kal-pil" id="kal-rokok" role="group" aria-label="Merokok">
-      <button type="button" aria-pressed="true" data-kal="tidak">Tidak merokok</button>
-      <button type="button" aria-pressed="false" data-kal="ya">Merokok</button>
-    </div>
-
     <div id="kal-hasil" aria-live="polite"></div>
 
-    <details class="kal-jadual">
-      <summary>Lihat jadual penuh</summary>
-      <div id="kal-jadual-isi"></div>
-    </details>
+    <div class="kal-bungkus">
+      <table class="kal-jadual" id="kal-jadual">
+        <caption>Caruman bulanan (RM)</caption>
+        <thead>
+          <tr>
+            <th rowspan="2" scope="col">Umur</th>
+            <th colspan="2" scope="colgroup" class="kepala-gender" data-g="L">Lelaki</th>
+            <th colspan="2" scope="colgroup" class="kepala-gender" data-g="P">Perempuan</th>
+          </tr>
+          <tr>
+            <th scope="col" data-g="L">150</th><th scope="col" data-g="L">200</th>
+            <th scope="col" data-g="P">150</th><th scope="col" data-g="P">200</th>
+          </tr>
+        </thead>
+        <tbody id="kal-badan"></tbody>
+      </table>
+    </div>
 
-    <p class="kal-halus">Anggaran pakej lengkap (pelan asas + rider) untuk bukan perokok; pakej mengandungi hibah minimum RM15,000. Kadar sebenar tertakluk kepada pengunderaitan, tempoh menunggu, pengecualian dan ko-takaful dalam sijil.</p>
+    <p class="kal-nota">150 = had tahunan RM1.5 juta &middot; 200 = RM2 juta. Kadar untuk <b>bukan perokok</b> sahaja — jika anda merokok, caruman lebih tinggi, beritahu saya dan saya kira.</p>
+    <p class="kal-halus">Anggaran pakej lengkap (pelan asas + rider); pakej mengandungi hibah minimum RM15,000. Kadar sebenar tertakluk kepada pengunderaitan, tempoh menunggu, pengecualian dan ko-takaful dalam sijil.</p>
     <a class="wa" id="kal-cta" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 5L2 22l5.16-1.35a9.9 9.9 0 0 0 4.88 1.27c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2Zm0 18.13a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.06.8.82-2.99-.2-.31a8.17 8.17 0 1 1 6.92 3.82Zm4.5-6.12c-.25-.12-1.47-.72-1.7-.8-.23-.09-.4-.13-.56.12-.17.25-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.02 2.6.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.5-.61 1.71-1.2.21-.6.21-1.1.15-1.21-.06-.11-.23-.18-.48-.3Z"/></svg>
       <span id="kal-cta-teks">Hantar anggaran ini kepada saya</span>
@@ -821,22 +834,27 @@
 
 <script>
 /* ---------- kalkulator anggaran caruman i-Medi Evolusi ----------
-   Data: kad kadar rasmi GETB (semua agen guna kad yg sama).
-   Kadar bulanan pakej lengkap (pelan asas + rider), BUKAN perokok sahaja. */
+   Satu jadual (lelaki + perempuan). Data: kad kadar rasmi GETB.
+   Kadar bulanan pakej lengkap (pelan asas + rider), bukan perokok. */
 (function(){
   var AGEN='60138884006';
-  var JALUR=["1–5","6–10","11–15","16–20","21–25","26–30","31–35","36–40","41–45","46–50"];
+  var JALUR=["1\u20135","6\u201310","11\u201315","16\u201320","21\u201325","26\u201330","31\u201335","36\u201340","41\u201345","46\u201350"];
   var K={ L:{150:[220,125,122,130,135,150,160,189,228,281], 200:[261,148,144,151,156,173,185,217,263,323]},
           P:{150:[220,115,112,120,123,138,159,187,230,285], 200:[261,136,131,139,143,159,183,215,263,327]} };
-  var st={j:'L', u:6, r:'tidak'};
-  var sel=document.getElementById('kal-umur'), hasil=document.getElementById('kal-hasil');
-  if(!sel||!hasil) return;
+  var st={j:'L', u:6};
+  var sel=document.getElementById('kal-umur'), badan=document.getElementById('kal-badan'),
+      hasil=document.getElementById('kal-hasil'), jadual=document.getElementById('kal-jadual');
+  if(!sel||!badan||!jadual) return;
 
   JALUR.forEach(function(j,i){ var o=document.createElement('option'); o.value=i;
     o.textContent=j+' tahun'; if(i===6) o.selected=true; sel.appendChild(o); });
   var o51=document.createElement('option'); o51.value='51'; o51.textContent='51 tahun ke atas'; sel.appendChild(o51);
 
-  function ribu(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  badan.innerHTML=JALUR.map(function(j,i){
+    return '<tr data-i="'+i+'"><th scope="row">'+j+'</th>'+
+      '<td data-g="L">'+K.L[150][i]+'</td><td data-g="L">'+K.L[200][i]+'</td>'+
+      '<td data-g="P">'+K.P[150][i]+'</td><td data-g="P">'+K.P[200][i]+'</td></tr>'; }).join('');
+
   function band(u){ if(u===null||isNaN(u)) return null; if(u>50) return 51; if(u<1) return 0; return Math.floor((u-1)/5); }
   function umurDari(iso){ if(!iso) return null; var d=new Date(iso+'T00:00:00'); if(isNaN(d)) return null;
     var t=new Date(), u=t.getFullYear()-d.getFullYear(), b=t.getMonth()-d.getMonth();
@@ -846,61 +864,55 @@
   function paut(teks){ var mobil=/Android|iPhone|iPad|iPod|Windows Phone|IEMobile/i.test(navigator.userAgent);
     return (mobil?'https://api.whatsapp.com/send?phone=':'https://web.whatsapp.com/send/?phone=')+AGEN+'&text='+encodeURIComponent(teks); }
 
+  function sorot(){
+    var aktif = (st.u===51) ? -1 : st.u;
+    [].forEach.call(badan.rows, function(tr,i){
+      tr.classList.toggle('aktif', i===aktif);
+      [].forEach.call(tr.cells, function(td){
+        var g=td.getAttribute('data-g'); if(!g) return;
+        td.classList.toggle('pudar', g!==st.j);
+        td.classList.toggle('kotak', i===aktif && g===st.j);
+      });
+    });
+    [].forEach.call(jadual.querySelectorAll('thead th[data-g]'), function(th){
+      th.classList.toggle('pudar', th.getAttribute('data-g')!==st.j);
+      th.classList.toggle('aktif-gender', th.getAttribute('data-g')===st.j);
+    });
+  }
+
   function lukis(){
-    var cta=document.getElementById('kal-cta'), ctaTeks=document.getElementById('kal-cta-teks');
+    var cta=document.getElementById('kal-cta'), teks=document.getElementById('kal-cta-teks');
     if(st.u===51){
-      hasil.innerHTML='<div class="kal-notis"><b>Umur 51 tahun ke atas tidak layak untuk kad perubatan ini.</b> Kalau begitu, beritahu saya umur sebenar — saya semak apa yang masih boleh dibuat.</div>';
-      ctaTeks.textContent='Semak pilihan lain untuk saya';
-      cta.href=paut('Assalamualaikum Harun. Saya semak di laman: umur 51 tahun ke atas, '+ (st.j==='L'?'lelaki':'perempuan') +'. Saya faham tidak layak untuk kad perubatan ini. Ada pilihan lain?');
-      return;
+      hasil.innerHTML='<div class="kal-notis"><b>Umur 51 tahun ke atas tidak layak untuk kad perubatan ini.</b> Beritahu saya umur sebenar — saya semak apa yang masih boleh dibuat.</div>';
+      teks.textContent='Semak pilihan lain untuk saya';
+      cta.href=paut('Assalamualaikum Harun. Saya semak di laman: umur 51 tahun ke atas, '+(st.j==='L'?'lelaki':'perempuan')+'. Saya faham tidak layak untuk kad perubatan ini. Ada pilihan lain?');
+    } else {
+      var a=K[st.j][150][st.u], b=K[st.j][200][st.u];
+      hasil.innerHTML='<p class="kal-beza">+RM'+(b-a)+' sebulan untuk had tambahan RM500,000</p>';
+      teks.textContent='Hantar anggaran ini kepada saya';
+      cta.href=paut('Assalamualaikum Harun. Saya semak di laman: '+(st.j==='L'?'lelaki':'perempuan')+', umur '+JALUR[st.u]+' tahun, bukan perokok. Anggaran keluar: EVOLUSI 150 = RM'+a+'/bulan, EVOLUSI 200 = RM'+b+'/bulan. Boleh terangkan lanjut?');
     }
-    if(st.r==='ya'){
-      hasil.innerHTML='<div class="kal-notis"><b>Kadar untuk perokok berbeza.</b> Jadual ini untuk bukan perokok sahaja. Bagi yang merokok, caruman biasanya lebih tinggi — beritahu saya, saya kira angka sebenar.</div>';
-      ctaTeks.textContent='Kira caruman untuk perokok';
-      cta.href=paut('Assalamualaikum Harun. Saya semak di laman: '+ (st.j==='L'?'lelaki':'perempuan') +', umur '+JALUR[st.u]+' tahun, saya merokok. Boleh kira caruman sebenar untuk saya?');
-      return;
-    }
-    var a=K[st.j][150][st.u], b=K[st.j][200][st.u];
-    hasil.innerHTML='<div class="kal-harga">'+
-      '<div><div class="kal-pakej">EVOLUSI 150</div><div class="kal-rm">RM'+a+'</div>'+
-      '<div class="kal-bln">sebulan</div><div class="kal-had">Had tahunan<br>RM1.5 juta</div></div>'+
-      '<div><div class="kal-pakej">EVOLUSI 200</div><div class="kal-rm">RM'+b+'</div>'+
-      '<div class="kal-bln">sebulan</div><div class="kal-had">Had tahunan<br>RM2 juta</div></div>'+
-      '</div><p class="kal-beza">+RM'+(b-a)+' sebulan untuk had tambahan RM500,000</p>'+
-      '<p class="kal-thn">RM'+ribu(a*12)+' atau RM'+ribu(b*12)+' setahun &middot; resit tahunan memudahkan tuntutan pelepasan cukai</p>';
-    ctaTeks.textContent='Hantar anggaran ini kepada saya';
-    cta.href=paut('Assalamualaikum Harun. Saya semak di laman: '+ (st.j==='L'?'lelaki':'perempuan') +', umur '+JALUR[st.u]+' tahun, bukan perokok. Anggaran keluar: EVOLUSI 150 = RM'+a+'/bulan, EVOLUSI 200 = RM'+b+'/bulan. Boleh terangkan lanjut?');
+    sorot();
   }
 
   document.getElementById('kal-jantina').addEventListener('click', function(e){
     var b=e.target.closest('button'); if(!b) return; st.j=b.dataset.kal; pilih('kal-jantina', st.j); lukis(); });
-  document.getElementById('kal-rokok').addEventListener('click', function(e){
-    var b=e.target.closest('button'); if(!b) return; st.r=b.dataset.kal; pilih('kal-rokok', st.r); lukis(); });
   sel.addEventListener('change', function(){ st.u = sel.value==='51' ? 51 : +sel.value; lukis(); });
 
-  /* selaras dgn borang: jantina, merokok, tarikh lahir — satu hala sahaja */
+  /* selaras dgn borang: jantina + tarikh lahir (satu hala) */
   function dariBorang(){
     var jb=document.querySelector('.kumpulan[data-wajib="jantina"] .kad[aria-pressed="true"]');
-    if(jb && jb.dataset.nilai && (jb.dataset.nilai==='Lelaki'||jb.dataset.nilai==='Perempuan')){
+    if(jb && (jb.dataset.nilai==='Lelaki'||jb.dataset.nilai==='Perempuan')){
       st.j = jb.dataset.nilai==='Perempuan'?'P':'L'; pilih('kal-jantina', st.j); }
-    var rb=document.querySelector('.kumpulan[data-wajib="merokok"] .kad[aria-pressed="true"]');
-    if(rb && rb.dataset.nilai){ st.r = rb.dataset.nilai==='Ya'?'ya':'tidak'; pilih('kal-rokok', st.r); }
     var dob=document.getElementById('f_dob');
     if(dob && dob.value){ var u=umurDari(dob.value), i=band(u);
       if(i!==null){ st.u=i; sel.value = i===51 ? '51' : String(i); } }
     lukis();
   }
-  ['jantina','merokok'].forEach(function(k){
-    var g=document.querySelector('.kumpulan[data-wajib="'+k+'"]'); if(g) g.addEventListener('click', function(){ setTimeout(dariBorang,0); });
-  });
-  var dobEl=document.getElementById('f_dob'); if(dobEl){ dobEl.addEventListener('change', dariBorang); dobEl.addEventListener('blur', dariBorang); }
-
-  document.getElementById('kal-jadual-isi').innerHTML=(function(){
-    function t(j,nama){ return '<table><thead><tr><th>Umur</th><th>'+nama+' 150</th><th>'+nama+' 200</th></tr></thead><tbody>'+
-      JALUR.map(function(x,i){ return '<tr><td>'+x+'</td><td>RM'+K[j][150][i]+'</td><td>RM'+K[j][200][i]+'</td></tr>'; }).join('')+
-      '</tbody></table>'; }
-    return '<p class="kap">LELAKI</p>'+t('L','Evolusi')+'<p class="kap">PEREMPUAN</p>'+t('P','Evolusi');
-  })();
+  var gj=document.querySelector('.kumpulan[data-wajib="jantina"]');
+  if(gj) gj.addEventListener('click', function(){ setTimeout(dariBorang,0); });
+  var dobEl=document.getElementById('f_dob');
+  if(dobEl){ dobEl.addEventListener('change', dariBorang); dobEl.addEventListener('blur', dariBorang); }
 
   dariBorang();
 })();
