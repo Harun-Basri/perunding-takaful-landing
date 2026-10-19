@@ -1311,9 +1311,13 @@
   });
   selBandar.addEventListener('change',function(){ nilai.bandar=this.value; });
 
-  var fNama=document.getElementById('f_nama');
-  fNama.addEventListener('blur',function(){ this.value=formatNama(this.value); });
-  fNama.addEventListener('change',function(){ this.value=formatNama(this.value); });
+  /* Nama: medan dirapatkan pada blur/change DAN sebelum hantar, supaya nilai
+     tersimpan tidak bergantung pada pengguna menyentuh medan itu. */
+  ['f_nama','f_pemohon','f_kerja'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    el.addEventListener('blur',function(){ this.value=formatNama(this.value); });
+    el.addEventListener('change',function(){ this.value=formatNama(this.value); });
+  });
 
   /* nilai awal utk kumpulan yg sudah dipilih */
   [].slice.call(document.querySelectorAll('.kumpulan[data-wajib]')).forEach(function(g){
@@ -1718,6 +1722,9 @@
     var jebak=document.getElementById('f_website');
     if(jebak && String(jebak.value||'').trim()!==''){ _sudahHantar=true; return; }
     _sudahHantar=true;
+    ['f_nama','f_pemohon','f_kerja'].forEach(function(id){
+      var el=document.getElementById(id); if(el) el.value=formatNama(el.value);
+    });
     var data=dataLead();
     var id=simpanGiliran(data);
     statusHantar('menghantar');
