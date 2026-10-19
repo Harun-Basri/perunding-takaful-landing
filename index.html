@@ -758,9 +758,13 @@
   .kal-sl-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
     font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
   .kal-sl-h output{font:700 12.5px var(--sans);letter-spacing:0;text-transform:none;color:var(--maroon)}
-  #kal-umur{-webkit-appearance:none;appearance:none;width:100%;height:26px;margin:6px 0 0;background:transparent;
-    background-image:linear-gradient(to right,var(--gold-2) 0 var(--isi),#dfdccd var(--isi) 100%);
-    background-size:100% 4px;background-position:0 center;background-repeat:no-repeat;border-radius:2px}
+  #kal-umur{-webkit-appearance:none;appearance:none;display:block;width:100%;height:26px;margin:6px 0 0;padding:0;
+    --thumb:22px; --trek:4px;
+    background-image:linear-gradient(to right,var(--gold-2) 0,var(--gold-2) var(--isi,0%),#dfdccd var(--isi,0%),#dfdccd 100%),
+                     linear-gradient(#0000,#0000);
+    background-size:100% var(--trek),100% 100%;
+    background-position:0 calc(50% - var(--trek)/2), 0 0;
+    background-repeat:no-repeat;background-color:transparent;border-radius:2px}
   #kal-umur::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
     background:var(--white);border:2px solid var(--maroon);box-shadow:0 2px 6px rgba(17,21,18,.18);cursor:grab;
     transition:transform .18s var(--lengkung),box-shadow .18s var(--lengkung)}
@@ -772,8 +776,11 @@
     border:2px solid var(--maroon);box-shadow:0 2px 6px rgba(17,21,18,.18);cursor:grab}
   #kal-umur::-moz-range-track{height:4px;background:#dfdccd;border-radius:2px}
   #kal-umur::-moz-range-progress{height:4px;background:var(--gold-2);border-radius:2px}
-  .kal-sl-l{display:flex;justify-content:space-between;margin:2px 0 0;font:400 8.5px var(--mono);color:var(--ink-muted)}
-  .kal-sl-l span{width:0;display:flex;justify-content:center;white-space:nowrap}
+  .kal-sl-l{display:grid;grid-template-columns:repeat(3,1fr);margin:2px 0 0;
+    font:400 8.5px var(--mono);color:var(--ink-muted)}
+  .kal-sl-l span:nth-child(1){text-align:left}
+  .kal-sl-l span:nth-child(2){text-align:center}
+  .kal-sl-l span:nth-child(3){text-align:right}
   .kal-notis{margin:12px 0 0;padding:11px 12px;background:var(--paper);border:1px solid var(--line);
     border-left:3px solid var(--gold);border-radius:var(--r-sm);font:400 11px var(--sans);line-height:1.5}
   .kal-beza{margin:10px 0 0;font:600 10.5px var(--sans);color:var(--maroon-terang)}
@@ -787,9 +794,10 @@
   @media (prefers-reduced-motion:reduce){.kal-bar,.kal-sorot{transition:none}}
   table.kal-jadual{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;
     font:400 10px var(--sans);color:var(--ink)}
-  .kal-jadual caption{caption-side:top;text-align:left;font:600 8.5px var(--mono);letter-spacing:.1em;
-    color:var(--ink-muted);padding:0 0 6px}
+  .kal-cap{margin:0 0 6px;font-family:var(--mono);font-size:10px;line-height:1.3;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:600;color:var(--ink-muted);white-space:nowrap}
   .kal-jadual col,.kal-jadual th,.kal-jadual td{width:20%}
+  .kal-jadual{caption-side:top}
   .kal-jadual th,.kal-jadual td{padding:5px 3px;text-align:center;border-bottom:1px solid #eeece2;
     transition:background-color .3s var(--lengkung),color .3s var(--lengkung)}
   .kal-jadual th:first-child,.kal-jadual td:first-child{font-family:var(--mono);font-size:9.5px}
@@ -836,8 +844,8 @@
     <div id="kal-hasil" aria-live="polite"></div>
 
     <div class="kal-bungkus">
+      <p class="kal-cap">Caruman bulanan (RM)</p>
       <table class="kal-jadual" id="kal-jadual">
-        <caption>Caruman bulanan (RM)</caption>
         <colgroup><col><col><col><col><col></colgroup>
         <thead>
           <tr>
@@ -881,7 +889,7 @@
       teks=document.getElementById('kal-umur-teks'), label=document.getElementById('kal-sl-l');
   if(!sel||!badan||!jadual) return;
 
-  label.innerHTML='<span style="justify-content:flex-start">1</span><span>50</span><span style="justify-content:flex-end">51+</span>';
+  label.innerHTML='<span>1</span><span>26</span><span>51+</span>';
 
   badan.innerHTML=JALUR.map(function(j,i){
     return '<tr data-i="'+i+'"><th scope="row">'+j+'</th>'+
@@ -895,9 +903,9 @@
   function pilih(id, nilai){ [].forEach.call(document.getElementById(id).querySelectorAll('button'),
       function(b){ b.setAttribute('aria-pressed', b.dataset.kal===nilai?'true':'false'); }); }
   function kemasSel(){
-    var v=+sel.value, min=+sel.min, max=+sel.max, pct=((v-min)/(max-min))*100,
-        off=(100-22*((100-pct)/100)).toFixed(2);
-    sel.style.backgroundImage='linear-gradient(to right,var(--gold-2) '+off+'%,var(--gold-isi) '+off+'%)';
+    var v=+sel.value, min=+sel.min, max=+sel.max, pct=((v-min)/(max-min))*100;
+    /* hujung isi = tepi KANAN tombol (22px), bukan pusatnya */
+    sel.style.setProperty('--isi', (100-22*((100-pct)/100)).toFixed(2)+'%');
     teks.textContent = JALUR[v] ? JALUR[v]+' tahun' : '51 tahun ke atas';
     sel.setAttribute('aria-valuetext', teks.textContent);
   }
