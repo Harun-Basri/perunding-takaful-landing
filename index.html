@@ -110,6 +110,17 @@
   .cta:active{transform:translateY(0) scale(.995)}
   .cta span{font-family:var(--mono);font-size:11px;transition:transform var(--laju) var(--lengkung)}
   .cta:hover span{transform:translateX(3px)}
+
+  .atau{display:flex;align-items:center;gap:10px;margin:9px 0 8px;color:var(--ink-muted)}
+  .atau::before,.atau::after{content:"";flex:1;height:1px;background:rgba(227,199,122,.42)}
+  .atau span{font:400 9px var(--mono);letter-spacing:.18em;text-transform:uppercase}
+
+  .cta-2{display:block;width:100%;background:transparent;color:#dff1e9;
+    border:1px solid rgba(227,199,122,.55);border-radius:999px;padding:11px 18px;
+    font:600 12px var(--sans);letter-spacing:.01em;cursor:pointer;
+    transition:background-color .2s var(--lengkung),border-color .2s var(--lengkung)}
+  .cta-2:hover{background:rgba(227,199,122,.12);border-color:var(--gold)}
+  .cta-2:active{transform:scale(.995)}
   .cta::after{content:"";position:absolute;inset:0;transform:translateX(-120%);
        background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55),transparent 70%)}
   .cta:hover::after{animation:kilau .9s ease-out}
@@ -557,6 +568,8 @@
     <h1 class="masuk" style="--d:.12s"><span class="tl">Takaful yang</span><br><span class="tl">betul untuk</span><br><span class="tl"><em>keluarga anda.</em></span></h1>
     <p class="masuk" style="--d:.2s">Isi butiran ringkas, dan saya sendiri akan kira sebut harga percuma untuk anda melalui WhatsApp.</p>
     <button class="cta masuk" style="--d:.28s" data-pergi="1">Mula Semak Sebut Harga <span>&#8594;</span></button>
+    <div class="atau masuk" style="--d:.32s"><span>atau</span></div>
+    <button class="cta-2 masuk" style="--d:.36s" data-ke-kal>Semak Anggaran Caruman Dahulu &#8595;</button>
     <div class="badges masuk" style="--d:.36s">
       <span class="lbl">Percuma</span><span class="lbl">2 Minit</span>
     </div>
@@ -833,6 +846,8 @@
   .kal-rokok b{font-weight:700}
   .kal-halus{font:400 10px var(--sans);line-height:1.55;color:var(--ink-muted);margin:10px 0 0}
   .kal .wa{margin-top:12px}
+  .kal.sorot .kal-kad{box-shadow:0 0 0 2px var(--gold-2),0 10px 26px rgba(201,162,39,.22);
+    transition:box-shadow .35s var(--lengkung)}
   .kal-kaki{margin:9px 0 0;font:400 9px var(--mono);letter-spacing:.04em;color:var(--ink-muted);text-align:center}
 </style>
 
@@ -1127,6 +1142,19 @@
       if(kunci){ nilai[kunci]=nilaiBtn.dataset.nilai; kumpulan.classList.remove('salah');
                  if(kunci==='penyakit') tunjukNota(nilai[kunci]==='Ada');
                  var ps=kumpulan.querySelector('.pesan'); if(ps) ps.classList.remove('tunjuk'); }
+      return;
+    }
+
+    var kk=ev.target.closest('[data-ke-kal]');
+    if(kk){
+      var kal=document.getElementById('kal');
+      if(kal){
+        var halus2=(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth';
+        var yt=kal.getBoundingClientRect().top+(window.pageYOffset||document.documentElement.scrollTop)-56;
+        try{ window.scrollTo({top:yt, behavior:halus2}); }catch(e){ window.scrollTo(0,yt); }
+        kal.classList.add('sorot');
+        setTimeout(function(){ kal.classList.remove('sorot'); }, 2200);
+      }
       return;
     }
 
