@@ -763,14 +763,20 @@
   .kal-notis{margin:12px 0 0;padding:11px 12px;background:var(--paper);border:1px solid var(--line);
     border-left:3px solid var(--gold);border-radius:var(--r-sm);font:400 11px var(--sans);line-height:1.5}
   .kal-beza{margin:10px 0 0;font:600 10.5px var(--sans);color:var(--maroon-terang)}
-  .kal-bungkus{margin:12px 0 0}
+  .kal-bungkus{margin:12px 0 0;position:relative}
+  .kal-bar,.kal-sorot{position:absolute;top:0;left:0;pointer-events:none;opacity:0;
+    transition:transform .34s var(--lengkung),width .34s var(--lengkung),height .34s var(--lengkung),opacity .22s var(--lengkung)}
+  .kal-bar{width:3px;border-radius:2px;background:var(--maroon);z-index:2}
+  .kal-sorot{border:2px solid var(--maroon);border-radius:6px;z-index:3;box-sizing:border-box}
+  .kal-sorot.sedia,.kal-bar.sedia{opacity:1}
+  @media (prefers-reduced-motion:reduce){.kal-bar,.kal-sorot{transition:none}}
   table.kal-jadual{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;
     font:400 10px var(--sans);color:var(--ink)}
   .kal-jadual caption{caption-side:top;text-align:left;font:600 8.5px var(--mono);letter-spacing:.1em;
     color:var(--ink-muted);padding:0 0 6px}
-  .kal-jadual th,.kal-jadual td{padding:5px 3px;text-align:right;border-bottom:1px solid #eeece2;
-    transition:opacity .18s var(--lengkung),background-color .18s var(--lengkung),color .18s var(--lengkung)}
-  .kal-jadual th:first-child,.kal-jadual td:first-child{text-align:left;font-family:var(--mono);font-size:9.5px;padding-left:1px}
+  .kal-jadual th,.kal-jadual td{padding:5px 3px;text-align:center;border-bottom:1px solid #eeece2;
+    transition:background-color .3s var(--lengkung),color .3s var(--lengkung)}
+  .kal-jadual th:first-child,.kal-jadual td:first-child{font-family:var(--mono);font-size:9.5px}
   .kal-jadual thead th{font:600 8.5px var(--mono);letter-spacing:.06em;color:var(--ink-muted);
     border-bottom:1px solid var(--line);padding:3px 3px}
   .kal-jadual thead th.kepala-gender{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);padding-top:1px}
@@ -778,10 +784,8 @@
   .kal-jadual td.pudar{color:var(--ink-muted);font-weight:400}
   .kal-jadual thead th.pudar{color:#9aa39d}
   .kal-jadual tr.aktif td,.kal-jadual tr.aktif th{background:#e9f3ee}
-  .kal-jadual tr.aktif th:first-child,.kal-jadual tr.aktif td:first-child{font-weight:700;color:var(--ink);
-    box-shadow:inset 3px 0 0 var(--maroon)}
-  .kal-jadual td.kotak{background:var(--white);font:700 11px var(--sans);color:var(--maroon);
-    box-shadow:inset 0 0 0 2px var(--maroon);border-radius:4px}
+  .kal-jadual tr.aktif th:first-child,.kal-jadual tr.aktif td:first-child{font-weight:700;color:var(--ink)}
+  .kal-jadual td.kotak{font:700 11px var(--sans);color:var(--maroon)}
   .kal-jadual thead th.aktif-gender,.kal-jadual thead th.kepala-gender.aktif-gender{color:var(--maroon)}
   .kal-nota{margin:9px 0 0;font:400 9.5px var(--sans);line-height:1.5;color:var(--ink-muted)}
   .kal-nota b{color:var(--ink);font-weight:600}
@@ -807,6 +811,7 @@
     <div class="kal-bungkus">
       <table class="kal-jadual" id="kal-jadual">
         <caption>Caruman bulanan (RM)</caption>
+        <colgroup><col style="width:40px"><col><col><col><col></colgroup>
         <thead>
           <tr>
             <th rowspan="2" scope="col">Umur</th>
@@ -820,6 +825,8 @@
         </thead>
         <tbody id="kal-badan"></tbody>
       </table>
+      <div class="kal-bar" id="kal-bar" aria-hidden="true"></div>
+      <div class="kal-sorot" id="kal-sorot" aria-hidden="true"></div>
     </div>
 
     <p class="kal-nota">150 = had tahunan RM1.5 juta &middot; 200 = RM2 juta. Kadar untuk <b>bukan perokok</b> sahaja — jika anda merokok, caruman lebih tinggi, beritahu saya dan saya kira.</p>
@@ -864,6 +871,25 @@
   function paut(teks){ var mobil=/Android|iPhone|iPad|iPod|Windows Phone|IEMobile/i.test(navigator.userAgent);
     return (mobil?'https://api.whatsapp.com/send?phone=':'https://web.whatsapp.com/send/?phone=')+AGEN+'&text='+encodeURIComponent(teks); }
 
+  var bar=document.getElementById('kal-bar'), kotak=document.getElementById('kal-sorot'),
+      bungkus=document.querySelector('.kal-bungkus');
+
+  function gerak(){
+    var aktif=(st.u===51)?-1:st.u;
+    if(aktif<0 || !badan.rows[aktif]){ bar.classList.remove('sedia'); kotak.classList.remove('sedia'); return; }
+    var tr=badan.rows[aktif], sel=tr.querySelectorAll('td[data-g="'+st.j+'"]');
+    if(sel.length<2) return;
+    var bb=bungkus.getBoundingClientRect(), r0=sel[0].getBoundingClientRect(), r1=sel[1].getBoundingClientRect(),
+        rt=tr.getBoundingClientRect(), sl=bungkus.scrollLeft||0;
+    var x=r0.left-bb.left+sl, y=rt.top-bb.top, w=r1.right-r0.left, h=rt.height;
+    bar.style.transform='translate(0px,'+y+'px)';
+    bar.style.height=h+'px';
+    kotak.style.transform='translate('+(x-1)+'px,'+(y-1)+'px)';
+    kotak.style.width=(w+2)+'px';
+    kotak.style.height=(h+2)+'px';
+    bar.classList.add('sedia'); kotak.classList.add('sedia');
+  }
+
   function sorot(){
     var aktif = (st.u===51) ? -1 : st.u;
     [].forEach.call(badan.rows, function(tr,i){
@@ -878,6 +904,7 @@
       th.classList.toggle('pudar', th.getAttribute('data-g')!==st.j);
       th.classList.toggle('aktif-gender', th.getAttribute('data-g')===st.j);
     });
+    gerak();
   }
 
   function lukis(){
@@ -914,6 +941,8 @@
   var dobEl=document.getElementById('f_dob');
   if(dobEl){ dobEl.addEventListener('change', dariBorang); dobEl.addEventListener('blur', dariBorang); }
 
+  window.addEventListener('resize', gerak);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(gerak);
   dariBorang();
 })();
 </script>
