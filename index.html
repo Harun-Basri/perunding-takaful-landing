@@ -758,13 +758,16 @@
   .kal-sl-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
     font:600 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
   .kal-sl-h output{font:700 12.5px var(--sans);letter-spacing:0;text-transform:none;color:var(--maroon)}
-  #kal-umur{-webkit-appearance:none;appearance:none;display:block;width:100%;height:26px;margin:6px 0 0;padding:0;
-    --thumb:22px; --trek:4px;
-    background-image:linear-gradient(to right,var(--gold-2) 0,var(--gold-2) var(--isi,0%),#dfdccd var(--isi,0%),#dfdccd 100%),
-                     linear-gradient(#0000,#0000);
-    background-size:100% var(--trek),100% 100%;
-    background-position:0 calc(50% - var(--trek)/2), 0 0;
-    background-repeat:no-repeat;background-color:transparent;border-radius:2px}
+  #kal-umur{-webkit-appearance:none;appearance:none;display:block;width:100%;height:26px;
+    margin:6px 0 0;padding:0;border:0;background-color:transparent;border-radius:2px;
+    --thumb:22px; --trek:4px; --f:0.6;
+    /* lapisan pertama (atas) = emas; kedua (di bawah) = trek kelabu penuh */
+    background-image:linear-gradient(var(--gold-2),var(--gold-2)),
+                     linear-gradient(#dfdccd,#dfdccd);
+    background-size:calc((100% - var(--thumb)) * var(--f)) var(--trek),
+                    calc(100% - var(--thumb)) var(--trek);
+    background-position:calc(var(--thumb)/2) center, calc(var(--thumb)/2) center;
+    background-repeat:no-repeat}
   #kal-umur::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
     background:var(--white);border:2px solid var(--maroon);box-shadow:0 2px 6px rgba(17,21,18,.18);cursor:grab;
     transition:transform .18s var(--lengkung),box-shadow .18s var(--lengkung)}
@@ -904,8 +907,8 @@
       function(b){ b.setAttribute('aria-pressed', b.dataset.kal===nilai?'true':'false'); }); }
   function kemasSel(){
     var v=+sel.value, min=+sel.min, max=+sel.max, pct=((v-min)/(max-min))*100;
-    /* hujung isi = tepi KANAN tombol (22px), bukan pusatnya */
-    sel.style.setProperty('--isi', (100-22*((100-pct)/100)).toFixed(2)+'%');
+    /* trek bermula/berakhir di PUSAT tombol (11px), jadi skala = trek sebenar */
+    sel.style.setProperty('--f', (pct/100).toFixed(4));
     teks.textContent = JALUR[v] ? JALUR[v]+' tahun' : '51 tahun ke atas';
     sel.setAttribute('aria-valuetext', teks.textContent);
   }
