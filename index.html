@@ -200,6 +200,9 @@
   /* saiz fon SAMA spt kad Bajet (b 12.5px, small 8.5px) */
   .kumpulan[data-wajib="perlindungan"] > .kad b{font-size:12.5px;letter-spacing:-.1px}
   .kumpulan[data-wajib="perlindungan"] > .kad small{font-size:8.5px;letter-spacing:.02em}
+  .atau-kad{flex:0 0 100%;display:flex;align-items:center;gap:9px;margin:8px 0 0;color:var(--ink-muted)}
+  .atau-kad::before,.atau-kad::after{content:"";flex:1;height:1px;background:var(--line)}
+  .atau-kad span{font:400 9px var(--mono);letter-spacing:.18em;text-transform:uppercase}
   .kumpulan[data-wajib="perlindungan"] > .kad[data-nilai="Tidak Pasti Lagi"]{
     flex:0 0 100%;margin:8px 0 0;flex-direction:row;text-align:left;gap:9px;padding:10px 11px}
   .kumpulan[data-wajib="perlindungan"] > .kad[data-nilai="Tidak Pasti Lagi"] b{font-size:12.5px}
@@ -627,6 +630,7 @@
           <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20s-7-4.6-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.4-7 9-7 9z"/></svg></span>
           <span><b>Sakit Kritikal</b><small>Lump sum tunai</small></span>
         </button>
+        <div class="atau-kad" aria-hidden="true"><span>atau</span></div>
         <button class="kad" aria-pressed="false" data-nilai="Tidak Pasti Lagi">
           <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.7 2.3c-.7.3-1.2.9-1.2 1.7v.3"/><path d="M12 17h.01"/></svg></span>
           <span><b>Tidak Pasti Lagi</b><small>Bincang dulu</small></span>
