@@ -178,6 +178,9 @@
   .medan input:focus,.medan textarea:focus{outline:0;border-color:var(--maroon);box-shadow:0 0 0 3px rgba(15,92,74,.13)}
   .medan textarea{min-height:74px;resize:vertical}
   .chip2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .lbl.tajuk-lbl.kedua{margin-top:18px}
+  [data-hanya]{display:none}
+  [data-hanya].tunjuk{display:block}
 
   .chip3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
   
@@ -589,7 +592,27 @@
 
     <section class="langkah-panel aktif" id="l1" role="tabpanel">
       <div class="hp" aria-hidden="true"><label>Jangan isi medan ini</label><input type="text" id="f_website" name="website" tabindex="-1" autocomplete="off"></div>
-      <span class="lbl tajuk-lbl">Pilihan Perlindungan</span>
+
+      <span class="lbl tajuk-lbl">Perlindungan Untuk Siapa?</span>
+      <div class="kumpulan" data-wajib="untukSiapa">
+        <div class="chip3">
+          <button class="kad" aria-pressed="true" data-nilai="Diri Sendiri">
+            <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-5.6 7-5.6s7 2 7 5.6"/></svg></span>
+            <span><b>Diri Sendiri</b><small>Saya</small></span>
+          </button>
+          <button class="kad" aria-pressed="false" data-nilai="Anak">
+            <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="9" r="3"/><path d="M7.5 20c0-2.8 2-4.3 4.5-4.3s4.5 1.5 4.5 4.3"/><path d="M4 7l2.2 1M20 7l-2.2 1"/></svg></span>
+            <span><b>Anak</b><small>Bawah jagaan</small></span>
+          </button>
+          <button class="kad" aria-pressed="false" data-nilai="Pasangan">
+            <span class="ikon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="9" r="2.8"/><circle cx="16" cy="10" r="2.4"/><path d="M3.5 20c0-3 2.4-4.7 5-4.7 1.1 0 2.1.3 2.9.8"/><path d="M13 20c-.3-2.7 1.4-4.2 3.2-4.2S20 17.3 20 20"/></svg></span>
+            <span><b>Pasangan</b><small>Suami / isteri</small></span>
+          </button>
+        </div>
+        <p class="pesan">Sila pilih perlindungan untuk siapa</p>
+      </div>
+
+      <span class="lbl tajuk-lbl bawah kedua">Pilihan Perlindungan</span>
       <span class="lbl lbl-pilih">(Boleh pilih lebih daripada satu)</span>
       <div class="kumpulan" data-wajib="perlindungan">
         <button class="kad" aria-pressed="true" data-nilai="Medical Card">
@@ -638,7 +661,13 @@
     </section>
 
     <section class="langkah-panel" id="l2" role="tabpanel">
-      <div class="medan"><label for="f_nama">Nama Penuh</label><input required id="f_nama" maxlength="80" placeholder="Samad Bin Said" autocomplete="name"></div>
+      <div data-hanya="Anak Pasangan">
+        <div class="medan"><label for="f_pemohon">Nama Pemohon (Anda)</label><input id="f_pemohon" maxlength="80" placeholder="Samad Bin Said" autocomplete="name"></div>
+      </div>
+      <div class="medan">
+        <label for="f_nama" id="lbl_dilindungi">Nama Penuh</label>
+        <input required id="f_nama" maxlength="80" placeholder="Samad Bin Said" autocomplete="name">
+      </div>
       <div class="grid2">
         <div class="medan"><label for="f_dob">Tarikh Lahir</label><input required id="f_dob" type="date"></div>
         <div class="medan"><label for="f_phone">No Telefon</label><input required id="f_phone" maxlength="12" inputmode="numeric" placeholder="0123456789"></div>
@@ -1140,6 +1169,7 @@
       }
       nilaiBtn.setAttribute('aria-pressed','true');
       if(kunci){ nilai[kunci]=nilaiBtn.dataset.nilai; kumpulan.classList.remove('salah');
+                 if(kunci==='untukSiapa') tukarLabel();
                  if(kunci==='penyakit') tunjukNota(nilai[kunci]==='Ada');
                  var ps=kumpulan.querySelector('.pesan'); if(ps) ps.classList.remove('tunjuk'); }
       return;
@@ -1394,7 +1424,9 @@
         ['Bajet / bulan', nilai.bajet]
       ]],
       ['\uD83D\uDC64','Diri', [
-        ['Nama', v('f_nama')],
+        ['Untuk Siapa', untukSiapa()],
+        ['Nama Pemohon', dilindungiBukanDiri() ? v('f_pemohon') : ''],
+        ['Nama'+(dilindungiBukanDiri() ? ' '+untukSiapa() : ''), v('f_nama')],
         ['Tarikh Lahir', formatDob(v('f_dob'))],
         ['No Telefon', v('f_phone') ? formatHp(v('f_phone')) : ''],
         ['Jantina', nilai.jantina],
@@ -1422,11 +1454,65 @@
   }
 
   /* ---------- semua medan wajib ---------- */
-  var WAJIB={1:['perlindungan','bajet'],
+  var WAJIB={1:['untukSiapa','perlindungan','bajet'],
              2:['f_nama','f_dob','f_phone','jantina','f_berat','f_tinggi','kawasan','status','f_kerja'],
              3:['merokok','penyakit','f_nota']};
 
+  /* ============ perlindungan untuk siapa ============
+     Semua medan Diri kekal; label bertukar supaya jelas ia tentang ORANG DILINDUNGI,
+     bukan pemohon. Pemohon hanya ditanya bila orang dilindungi bukan diri sendiri. */
+  function untukSiapa(){ return nilai.untukSiapa || 'Diri Sendiri'; }
+  function dilindungiBukanDiri(){ return untukSiapa()!=='Diri Sendiri'; }
+  function umurDilindungi(){
+    var iso=v('f_dob'); if(!iso) return null;
+    var p=iso.split('-'); if(p.length!==3) return null;
+    var l=new Date(+p[0], +p[1]-1, +p[2]), k=new Date();
+    var u=k.getFullYear()-l.getFullYear(), b=k.getMonth()-l.getMonth();
+    if(b<0 || (b===0 && k.getDate()<l.getDate())) u--;
+    return (u>=0 && u<120) ? u : null;
+  }
+  function kanakKanak(){ var u=umurDilindungi(); return dilindungiBukanDiri() && u!==null && u<18; }
+
+  var LABEL={};
+  LABEL['Diri Sendiri']={nama:'Nama Penuh', jantina:'Jantina', berat:'Berat (kg)', tinggi:'Tinggi (cm)',
+    status:'Status', kerja:'Pekerjaan', penyakit:'Sejarah Penyakit', merokok:'Merokok / Vape'};
+  LABEL['Anak']={nama:'Nama Anak', jantina:'Jantina Anak', berat:'Berat Anak (kg)', tinggi:'Tinggi Anak (cm)',
+    status:'Status Anak', kerja:'Sekolah / Pekerjaan Anak', penyakit:'Sejarah Penyakit Anak', merokok:'Merokok / Vape Anak'};
+  LABEL['Pasangan']={nama:'Nama Pasangan', jantina:'Jantina Pasangan', berat:'Berat Pasangan (kg)',
+    tinggi:'Tinggi Pasangan (cm)', status:'Status Pasangan', kerja:'Pekerjaan Pasangan',
+    penyakit:'Sejarah Penyakit Pasangan', merokok:'Merokok / Vape Pasangan'};
+
+  function tukarLabel(){
+    /* label 'Perlindungan Untuk Siapa?' juga dirujuk SUV — tidak berubah, cuma untuk kejelasan */
+    var L=LABEL[untukSiapa()] || LABEL['Diri Sendiri'];
+    var ld=document.getElementById('lbl_dilindungi'); if(ld) ld.textContent=L.nama;
+    var map=[['jantina',0],['berat',0],['tinggi',0],['status',0],['kerja',0],['penyakit',0],['merokok',0]];
+    document.querySelectorAll('.kumpulan[data-wajib] .lbl.tajuk-lbl').forEach(function(el){
+      var k=el.parentNode.getAttribute('data-wajib'); if(L[k]) el.textContent=L[k];
+    });
+    var bw=document.querySelector('.kumpulan[data-wajib="berat"]'); /* tiada kumpulan; medan guna label for */
+    [['f_berat','berat'],['f_tinggi','tinggi'],['f_kerja','kerja']].forEach(function(pair){
+      var lab=document.querySelector('label[for="'+pair[0]+'"]'); if(lab) lab.textContent=L[pair[1]];
+    });
+    /* Pemohon: tunjuk bila bukan diri sendiri */
+    document.querySelectorAll('[data-hanya]').forEach(function(w){
+      var perlu=w.getAttribute('data-hanya').split(' ').indexOf(untukSiapa())>=0;
+      w.classList.toggle('tunjuk', perlu);
+      var inp=w.querySelector('input');
+      if(inp){ if(perlu) inp.setAttribute('required',''); else { inp.removeAttribute('required'); } }
+    });
+    /* Merokok tidak relevan untuk kanak-kanak bawah 18 */
+    var gm=document.querySelector('.kumpulan[data-wajib="merokok"]');
+    if(gm){
+      var sorok=kanakKanak();
+      gm.style.display = sorok ? 'none' : '';
+      if(sorok){ nilai.merokok='Tidak'; }
+    }
+  }
+
   function kosong(k){
+    if(k==='untukSiapa') return !nilai.untukSiapa;
+    if(k==='f_pemohon') return dilindungiBukanDiri() && !v('f_pemohon');
     /* f_nota hanya wajib bila pengguna pilih "Ada" */
     if(k==='perlindungan') return !(nilai.perlindungan && nilai.perlindungan.length);
     if(k==='f_nota') return (nilai.penyakit==='Ada') && !String((document.getElementById('f_nota')||{}).value||'').trim();
@@ -1454,6 +1540,11 @@
     if(b){ g.classList.remove('salah'); void g.offsetWidth; g.classList.add('salah'); } else g.classList.remove('salah');
     var ps=g.querySelector('.pesan'); if(ps) ps.classList.toggle('tunjuk',b);
   }
+
+  (function(){
+    var d=document.getElementById('f_dob');
+    if(d) d.addEventListener('change', function(){ tukarLabel(); });
+  })();
 
   function sahkan(n){
     var rosak=false, pertama=null;
@@ -1551,6 +1642,9 @@
   function dataLead(){
     return {
       token: SHEET_TOKEN,
+      untuk_siapa: untukSiapa(),
+      nama_pemohon: v('f_pemohon'),
+      nama_dilindungi: v('f_nama'),
       nama: v('f_nama'),
       dob: formatDob(v('f_dob')),
       telefon: formatHp(v('f_phone')),
@@ -1638,6 +1732,8 @@
     if(!g.getAttribute('aria-label')) g.setAttribute('aria-label', NAMA_KUMPULAN[k]||k);
   });
 
+  nilai.untukSiapa='Diri Sendiri';
+  tukarLabel();
   pergi(1);
   setTimeout(cubaGiliranTertunggak, 4000);
 })();
